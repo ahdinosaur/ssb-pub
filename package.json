@@ -1,0 +1,11 @@
+{
+  "name": "ssb-pub",
+  "version": "0.0.0",
+  "description": "easily host your own Secure ScuttleButt (SSB) pub in a docker container",
+  "scripts": {
+    "build": "docker build -t ahdinosaur/ssb-pub .",
+    "start": "docker run -it --rm ahdinosaur/ssb-pub",
+    "publish": "docker push ahdinosaur/ssb-pub"
+  },
+  "license": "AGPL-3.0"
+}
