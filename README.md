@@ -12,13 +12,13 @@ on a fresh Debian 9 box, as root
 
 ```shell
 apt update
-apt upgrade
-apt install apt-transport-https ca-certificates curl software-properties-common
+apt upgrade -y
+apt install -y apt-transport-https ca-certificates curl software-properties-common
 wget https://download.docker.com/linux/debian/gpg -O docker-gpg
 sudo apt-key add docker-gpg
 echo "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee -a /etc/apt/sources.list.d/docker.list
 apt update
-apt install docker-ce
+apt install -y docker-ce
 systemctl start docker
 systemctl enable docker
 ```
@@ -43,18 +43,19 @@ docker build -t ssb-pub .
 
 ## start service
 
-#### 1. create a directory on the docker host for persisting the pub's data
+#### step 1. create a directory on the docker host for persisting the pub's data
 
 ```shell
-mkdir ~/ssb-pub-data
+mkdir /root/ssb-pub-data
+chown -R 1000:1000 /root/ssb-pub-data
 ```
 
-#### 2. run the container
+#### step 2. run the container
 
 ```shell
 docker run --name my-ssb-pub \
    -d -v ~/ssb-pub-data/:/home/node/.ssb/ \
-   -e HOST="<hostname.yourdomain.tld>" \
+   -e ssb_host="<hostname.yourdomain.tld>" \
    -p 8008:8008 --restart unless-stopped \
    ahdinosaur/ssb-pub
 ```
@@ -65,7 +66,7 @@ from your remote machine
 
 ```shell
 docker run -it --rm \
-   -d -v ~/ssb-pub-data/:/home/node/.ssb/ \
+   -v ~/ssb-pub-data/:/home/node/.ssb/ \
    ahdinosaur/ssb-pub \
    invite.create 1
 ```
@@ -73,11 +74,15 @@ docker run -it --rm \
 from your local machine, using ssh
 
 ```shell
-ssh root@<hostname.yourdomain.tld> invite.create 1
+ssh root@<hostname.yourdomain.tld> \
+  docker run -it --rm \
+     -v ~/ssb-pub-data/:/home/node/.ssb/ \
+     ahdinosaur/ssb-pub \
+     invite.create 1
 ```
 
 ## control service
 
 - `docker stop my-ssb-pub`
-- `docker stop my-ssb-pub`
+- `docker start my-ssb-pub`
 - `docker restart my-ssb-pub`

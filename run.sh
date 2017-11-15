@@ -1,2 +1,2 @@
-#!/bin/bash
-sbot --host $HOST
+#!/bin/sh
+sbot
