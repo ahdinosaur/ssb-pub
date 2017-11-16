@@ -53,8 +53,8 @@ chown -R 1000:1000 /root/ssb-pub-data
 #### step 2. run the container
 
 ```shell
-docker run --name my-ssb-pub \
-   -d -v ~/ssb-pub-data/:/home/node/.ssb/ \
+docker run -d --name sbot \
+   -v ~/ssb-pub-data/:/home/node/.ssb/ \
    -e ssb_host="<hostname.yourdomain.tld>" \
    -p 8008:8008 --restart unless-stopped \
    ahdinosaur/ssb-pub
@@ -67,6 +67,7 @@ from your remote machine
 ```shell
 docker run -it --rm \
    -v ~/ssb-pub-data/:/home/node/.ssb/ \
+   -e ssb_host="<hostname.yourdomain.tld>" \
    ahdinosaur/ssb-pub \
    invite.create 1
 ```
@@ -77,12 +78,13 @@ from your local machine, using ssh
 ssh root@<hostname.yourdomain.tld> \
   docker run -it --rm \
      -v ~/ssb-pub-data/:/home/node/.ssb/ \
+     -e ssb_host="<hostname.yourdomain.tld>" \
      ahdinosaur/ssb-pub \
      invite.create 1
 ```
 
 ## control service
 
-- `docker stop my-ssb-pub`
-- `docker start my-ssb-pub`
-- `docker restart my-ssb-pub`
+- `docker stop sbot`
+- `docker start sbot`
+- `docker restart sbot`
