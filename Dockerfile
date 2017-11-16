@@ -19,5 +19,5 @@ RUN npm install -g scuttlebot@10.4.4
 
 EXPOSE 8008
 
-ENTRYPOINT [ "./run.sh" ]
+ENTRYPOINT [ "sbot" ]
 CMD [ "server" ]
