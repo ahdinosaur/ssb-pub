@@ -1,7 +1,5 @@
 # ssb-pub
 
-__work in progress__
-
 easily host your own Secure ScuttleButt (SSB) pub in a docker container
 
 to run a pub you need to have a static public IP, ideally with a DNS record (i.e.`<hostname.yourdomain.tld>`)
