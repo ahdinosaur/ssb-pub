@@ -48,6 +48,8 @@ mkdir /root/ssb-pub-data
 chown -R 1000:1000 /root/ssb-pub-data
 ```
 
+if migrating from an old server, copy your old `secret` and `gossip.json` (maybe also `blobs`) now.
+
 #### step 2. run the container
 
 ```shell
