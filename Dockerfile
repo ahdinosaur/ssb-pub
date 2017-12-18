@@ -10,7 +10,7 @@ ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 
 
 USER node
-RUN npm install -g scuttlebot@10.4.4
+RUN npm install -g scuttlebot@10.4.10
 
 EXPOSE 8008
 
