@@ -74,8 +74,8 @@ from your local machine, using ssh
 
 ```shell
 ssh root@<hostname.yourdomain.tld> \
-  docker run -it --rm \
-     -v ~/ssb-pub-data/:/home/node/.ssb/ \
+  docker run --rm \
+     -v /root/ssb-pub-data/:/home/node/.ssb/ \
      -e ssb_host="<hostname.yourdomain.tld>" \
      ahdinosaur/ssb-pub \
      invite.create 1
