@@ -55,7 +55,7 @@ if migrating from an old server, copy your old `secret` and `gossip.json` (maybe
 #### step 2. run the container
 
 ```shell
-docker run -d --name sbot \
+docker run -d --init --name sbot \
    -v ~/ssb-pub-data/:/home/node/.ssb/ \
    -e ssb_host="<hostname.yourdomain.tld>" \
    -p 8008:8008 --restart unless-stopped \
