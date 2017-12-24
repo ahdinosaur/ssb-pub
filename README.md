@@ -90,3 +90,19 @@ ssh root@<hostname.yourdomain.tld> \
 - `docker stop sbot`
 - `docker start sbot`
 - `docker restart sbot`
+
+## restart when unhealthy
+
+using [eon01/d-ealer](https://github.com/eon01/d-ealer)
+
+```shell
+docker pull eon01/d-ealer
+```
+
+```shell
+docker run -d --name healer \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  eon01/d-ealer
+```
+
+add `-l com.dealer.activate=1` to your `sbot` container.

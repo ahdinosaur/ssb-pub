@@ -14,5 +14,8 @@ RUN npm install -g scuttlebot@10.4.10
 
 EXPOSE 8008
 
+HEALTHCHECK --interval=30s --timeout=30s --start-period=10s --retries=10 \
+  CMD sbot whoami || exit 1
+
 ENTRYPOINT [ "sbot" ]
 CMD [ "server" ]
