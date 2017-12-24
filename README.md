@@ -91,18 +91,16 @@ ssh root@<hostname.yourdomain.tld> \
 - `docker start sbot`
 - `docker restart sbot`
 
-## restart when unhealthy
+## setup auto-healer
 
-using [eon01/d-ealer](https://github.com/eon01/d-ealer)
+using [somarat/healer](https://github.com/somarat/healer)
 
 ```shell
-docker pull eon01/d-ealer
+docker pull somarat/healer
 ```
 
 ```shell
 docker run -d --name healer \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  eon01/d-ealer
+  -v /var/run/docker.sock:/tmp/docker.sock \
+  somarat/healer
 ```
-
-add `-l com.dealer.activate=1` to your `sbot` container.
