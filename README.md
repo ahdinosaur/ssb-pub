@@ -96,11 +96,11 @@ ssh root@<hostname.yourdomain.tld> \
 using [somarat/healer](https://github.com/somarat/healer)
 
 ```shell
-docker pull somarat/healer
+docker pull ahdinosaur/healer
 ```
 
 ```shell
 docker run -d --name healer \
   -v /var/run/docker.sock:/tmp/docker.sock \
-  somarat/healer
+  ahdinosaur/healer
 ```
