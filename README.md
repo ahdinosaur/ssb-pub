@@ -47,6 +47,8 @@ ssh root@your.ip.address.here
 
 10) invite and host your friends on [Scuttlebutt](https://www.scuttlebutt.nz) :house_with_garden:
 
+(credit to [seven1m/do-install-button](https://github.com/seven1m/do-install-button) for the Digital Ocean installer)
+
 ## advanced setup
 
 on a fresh Debian 9 box, as root
