@@ -4,7 +4,7 @@ config:
   #cloud-config
   packages:
     - curl
-    - dig
+    - dnsutils
     - apt-transport-https
     - ca-certificates
     - software-properties-common
