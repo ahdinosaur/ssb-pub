@@ -2,5 +2,8 @@ name: ssb-pub
 image: debian-9-x64
 config:
   #cloud-config
+  packages:
+    - wget
   runcmd:
-    - cd /tmp && wget https://raw.githubusercontent.com/ahdinosaur/ssb-pub/master/install.sh && bash install.sh
+    - wget https://raw.githubusercontent.com/ahdinosaur/ssb-pub/master/install.sh
+    - bash install.sh
