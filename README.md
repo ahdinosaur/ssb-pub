@@ -6,27 +6,46 @@ to run a pub you need to have a static public IP, ideally with a DNS record (i.e
 
 if you feel like sharing your pub, please add it to [the informal registry of pubs](https://github.com/ssbc/scuttlebot/wiki/Pub-Servers) as request-only or with a re-usable invite (`invite.create 1000`)!
 
-## easy setup
+:heart:
 
-[![Install on DigitalOcean](http://butt.nz/button.svg)](http://butt.nz)
+## one-click setup
 
-wait some time, then once your server is ready
+1) go to [![Install on DigitalOcean](http://butt.nz/button.svg)](http://butt.nz) at [butt.nz](http://butt.nz)
+2) choose your server size and region
+
+> ![digital-butt-step-1.png](./images/digital-butt-step-1.png)
+
+3) log in to Digital Ocean, if not done already
+4) add ssh keys, if not done already
+5) start creating your pub server! :raised_hands:
+
+> ![digital-butt-step-2.png](./images/digital-butt-step-2.png)
+
+6) wait for a few minutes :hourglass:
+
+> ![digital-butt-step-3.png](./images/digital-butt-step-3.png)
+
+7) log in to your server using `ssh`
 
 ```shell
 ssh root@your.ip.address.here
 ```
 
-check if your server is up
+8) test your pub server works
 
 ```shell
 ./sbot whoami
 ```
 
-create your first invite!
+9) create your first invite!
 
 ```shell
 ./sbot invite.create 1
 ```
+
+> ![digital-butt-step-4.png](./images/digital-butt-step-4.png)
+
+10) invite and host your friends on [Scuttlebutt](https://www.scuttlebutt.nz) :house_with_garden:
 
 ## advanced setup
 
