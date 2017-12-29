@@ -2,26 +2,5 @@ name: ssb-pub
 image: debian-9-x64
 config:
   #cloud-config
-  packages:
-    - curl
-    - dnsutils
-    - apt-transport-https
-    - ca-certificates
-    - software-properties-common
   runcmd:
-    - wget https://download.docker.com/linux/debian/gpg -O docker-gpg
-    - sudo apt-key add docker-gpg
-    - echo "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee -a /etc/apt/sources.list.d/docker.list
-    - sudo apt update
-    - sudo apt ug
-    - apt install -y docker-ce
-    - systemctl start docker
-    - systemctl enable docker
-    - docker pull ahdinosaur/ssb-pub
-    - mkdir /root/ssb-pub-data
-    - chown -R 1000:1000 /root/ssb-pub-data
-    - docker run -d --name sbot -v /root/ssb-pub-data/:/home/node/.ssb/ -e ssb_host="$(dig +short myip.opendns.com @resolver1.opendns.com)" -p 8008:8008 --restart unless-stopped ahdinosaur/ssb-pub
-    - docker pull ahdinosaur/healer
-    - docker run -d --name healer -v /var/run/docker.sock:/tmp/docker.sock --restart unless-stopped ahdinosaur/healer
-    - echo "docker run -it --rm -v /root/ssb-pub-data/:/home/node/.ssb/ -e ssb_host="$(dig +short myip.opendns.com @resolver1.opendns.com)" ahdinosaur/ssb-pub $@" > /root/sbot
-    - chmod +x /root/sbot
+    - cd /tmp && wget https://raw.githubusercontent.com/ahdinosaur/ssb-pub/master/install.sh && bash install.sh
