@@ -50,7 +50,11 @@ mkdir /root/ssb-pub-data
 chown -R 1000:1000 /root/ssb-pub-data
 ```
 
-if migrating from an old server, copy your old `secret` and `gossip.json` (maybe also `blobs`) now.
+> if migrating from an old server, copy your old `secret` and `gossip.json` (maybe also `blobs`) now.
+>
+> ```
+> rsync -avz /root/ssb-pub-data/blobs/sha256/ $HOST:/root/ssb-pub-data/blobs/sha256/
+> ```
 
 #### step 2. run the container
 
