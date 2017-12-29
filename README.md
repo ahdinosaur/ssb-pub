@@ -2,8 +2,6 @@
 
 easily host your own [Secure ScuttleButt (SSB)](https://www.scuttlebutt.nz) pub in a docker container
 
-to run a pub you need to have a static public IP, ideally with a DNS record (i.e.`<hostname.yourdomain.tld>`)
-
 if you feel like sharing your pub, please add it to [the informal registry of pubs](https://github.com/ssbc/scuttlebot/wiki/Pub-Servers) as request-only or with a re-usable invite (`invite.create 1000`)!
 
 :heart:
@@ -50,6 +48,8 @@ ssh root@your.ip.address.here
 (credit to [seven1m/do-install-button](https://github.com/seven1m/do-install-button) for the Digital Ocean installer)
 
 ## advanced setup
+
+to run a pub you need to have a static public IP, ideally with a DNS record (i.e.`<hostname.yourdomain.tld>`)
 
 on a fresh Debian 9 box, as root
 
