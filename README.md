@@ -6,7 +6,29 @@ to run a pub you need to have a static public IP, ideally with a DNS record (i.e
 
 if you feel like sharing your pub, please add it to [the informal registry of pubs](https://github.com/ssbc/scuttlebot/wiki/Pub-Servers) as request-only or with a re-usable invite (`invite.create 1000`)!
 
-## setup box
+## easy setup
+
+[![Install on DigitalOcean](http://installer.71m.us/button.svg)](http://installer.71m.us/install?url=https://github.com/ahdinosaur/ssb-pub)
+
+wait some time, then once your server is ready
+
+```shell
+ssh root@your.ip.address.here
+```
+
+check if your server is up
+
+```shell
+./sbot whoami
+```
+
+create your first invite!
+
+```shell
+./sbot invite.create 1
+```
+
+## advanced setup
 
 on a fresh Debian 9 box, as root
 
@@ -23,7 +45,7 @@ systemctl start docker
 systemctl enable docker
 ```
 
-## install image
+### install image
 
 #### (option a) pull image from docker hub
 
@@ -41,7 +63,7 @@ cd ssb-pub
 docker build -t ssb-pub .
 ```
 
-## start service
+### start service
 
 #### step 1. create a directory on the docker host for persisting the pub's data
 
@@ -68,7 +90,7 @@ docker run -d --name sbot \
    ahdinosaur/ssb-pub
 ```
 
-## create invites
+### create invites
 
 from your remote machine
 
@@ -95,13 +117,13 @@ ssh root@$ssb_host \
      invite.create 1
 ```
 
-## control service
+### control service
 
 - `docker stop sbot`
 - `docker start sbot`
 - `docker restart sbot`
 
-## setup auto-healer
+### setup auto-healer
 
 using [somarat/healer](https://github.com/somarat/healer)
 
