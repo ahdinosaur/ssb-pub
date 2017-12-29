@@ -106,5 +106,6 @@ docker pull ahdinosaur/healer
 ```shell
 docker run -d --name healer \
   -v /var/run/docker.sock:/tmp/docker.sock \
+  --restart unless-stopped \
   ahdinosaur/healer
 ```
