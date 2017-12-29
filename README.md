@@ -8,7 +8,7 @@ if you feel like sharing your pub, please add it to [the informal registry of pu
 
 ## easy setup
 
-[![Install on DigitalOcean](http://installer.71m.us/button.svg)](http://installer.71m.us/install?url=https://github.com/ahdinosaur/ssb-pub)
+[![Install on DigitalOcean](http://butt.nz/button.svg)](http://butt.nz)
 
 wait some time, then once your server is ready
 

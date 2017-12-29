@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cd ~
 sudo apt install -y curl dnsutils apt-transport-https ca-certificates software-properties-common
 wget https://download.docker.com/linux/debian/gpg -O docker-gpg
 sudo apt-key add docker-gpg
