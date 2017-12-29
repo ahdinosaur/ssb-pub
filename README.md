@@ -60,7 +60,7 @@ chown -R 1000:1000 /root/ssb-pub-data
 
 ```shell
 docker run -d --name sbot \
-   -v ~/ssb-pub-data/:/home/node/.ssb/ \
+   -v /root/ssb-pub-data/:/home/node/.ssb/ \
    -e ssb_host="<hostname.yourdomain.tld>" \
    -p 8008:8008 --restart unless-stopped \
    ahdinosaur/ssb-pub
@@ -72,7 +72,7 @@ from your remote machine
 
 ```shell
 docker run -it --rm \
-   -v ~/ssb-pub-data/:/home/node/.ssb/ \
+   -v /root/ssb-pub-data/:/home/node/.ssb/ \
    -e ssb_host="<hostname.yourdomain.tld>" \
    ahdinosaur/ssb-pub \
    invite.create 1
