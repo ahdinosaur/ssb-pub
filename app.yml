@@ -23,3 +23,5 @@ config:
     - docker run -d --name sbot -v /root/ssb-pub-data/:/home/node/.ssb/ -e ssb_host="$(dig +short myip.opendns.com @resolver1.opendns.com)" -p 8008:8008 --restart unless-stopped ahdinosaur/ssb-pub
     - docker pull ahdinosaur/healer
     - docker run -d --name healer -v /var/run/docker.sock:/tmp/docker.sock --restart unless-stopped ahdinosaur/healer
+    - echo "docker run -it --rm -v /root/ssb-pub-data/:/home/node/.ssb/ -e ssb_host="$(dig +short myip.opendns.com @resolver1.opendns.com)" ahdinosaur/ssb-pub $@" > /root/sbot
+    - chmod +x /root/sbot
