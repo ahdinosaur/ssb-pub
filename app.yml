@@ -3,9 +3,10 @@ image: debian-9-x64
 config:
   #cloud-config
   packages:
+    - curl
+    - dig
     - apt-transport-https
     - ca-certificates
-    - curl
     - software-properties-common
   runcmd:
     - wget https://download.docker.com/linux/debian/gpg -O docker-gpg
