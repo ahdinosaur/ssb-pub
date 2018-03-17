@@ -1,5 +1,6 @@
 name: ssb-pub
 image: debian-9-x64
+min_size: 1gb
 config:
   #cloud-config
   packages:
