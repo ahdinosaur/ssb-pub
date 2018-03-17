@@ -49,7 +49,7 @@ ssh root@your.ip.address.here
 
 ## advanced setup
 
-to run a pub you need to have a static public IP, ideally with a DNS record (i.e.`<hostname.yourdomain.tld>`)
+to run a pub you need to have a static public IP, ideally with a DNS record (i.e.`hostname.yourdomain.tld`)
 
 on a fresh Debian 9 box, as root
 
@@ -84,13 +84,27 @@ cd ssb-pub
 docker build -t ssb-pub .
 ```
 
-### start service
-
-#### step 1. create a directory on the docker host for persisting the pub's data
+### set environment
 
 ```shell
-mkdir /root/ssb-pub-data
-chown -R 1000:1000 /root/ssb-pub-data
+cat > ~/source <<EOF
+export NAME=ssb-pub
+export HOST=hostname.yourdomain.tld
+
+export BYTES_PER_MEGABYTE=\$((10**6))
+export TOTAL_MEMORY_IN_BYTES=\$(free -b | awk '/Mem\:/ { print \$2 }')
+export MEMORY_LIMIT=\$((\${TOTAL_MEMORY_IN_BYTES} - \$((200 * \${BYTES_PER_MEGABYTE}))))
+EOF
+
+source ~/source
+echo "source source" >> ~/.bashrc
+```
+
+### create data directory to become docker volume
+
+```shell
+mkdir /root/${NAME}
+chown -R 1000:1000 /root/${NAME}
 ```
 
 > if migrating from an old server, copy your old `secret` and `gossip.json` (maybe also `blobs`) now.
@@ -99,56 +113,68 @@ chown -R 1000:1000 /root/ssb-pub-data
 > rsync -avz /root/ssb-pub-data/blobs/sha256/ $HOST:/root/ssb-pub-data/blobs/sha256/
 > ```
 
-#### step 2. run the container
+### initialize the pub
 
 ```shell
-ssb_host=<hostname.yourdomain.tld>
-
-docker run -d --name sbot \
-   -v /root/ssb-pub-data/:/home/node/.ssb/ \
-   -e ssb_host="$ssb_host" \
+cat > ~/init <<EOF
+docker run -d --name \${NAME} \
+   -v /root/\${NAME}/:/home/node/.ssb/ \
+   -e ssb_host=\${HOST} \
    -p 8008:8008 \
    --restart unless-stopped \
-   --memory $(($(free -b --si | awk '/Mem\:/ { print $2 }') - 200*(10**6))) \
+   --memory \${MEMORY_LIMIT} \
    ahdinosaur/ssb-pub
+EOF
+chmod +x ~/init
+~/init
 ```
 
 where
 
 - `--memory` sets an upper memory limit of your total memory minus 200 MB (for example: on a 1 GB server this could be simplified to `--memory 800m`)
 
-### create invites
-
-from your remote machine
+### send a request to the server
 
 ```shell
-ssb_host=<hostname.yourdomain.tld>
-
+cat > ~/sbot <<EOF
 docker run -it --rm \
-   -v /root/ssb-pub-data/:/home/node/.ssb/ \
-   -e ssb_host="$ssb_host" \
-   ahdinosaur/ssb-pub \
-   invite.create 1
+  -v /root/\${NAME}/:/home/node/.ssb/ \
+  -e ssb_host=\${HOST} \
+  ahdinosaur/ssb-pub \
+  \$@
+EOF
+chmod +x ~/sbot
+```
+
+```shell
+~/sbot whoami
+```
+
+### create invites
+
+from your remote machine (as root)
+
+```shell
+~/sbot invite.create 1
 ```
 
 from your local machine, using ssh
 
 ```shell
-ssb_host=<hostname.yourdomain.tld>
+ssh root@hostname.yourdomain.tld ./sbot invite.create 1
+```
 
-ssh root@$ssb_host \
-  docker run --rm \
-     -v /root/ssb-pub-data/:/home/node/.ssb/ \
-     -e ssb_host="$ssb_host" \
-     ahdinosaur/ssb-pub \
-     invite.create 1
+### check the stats
+
+```shell
+docker stats --no-stream
 ```
 
 ### control service
 
-- `docker stop sbot`
-- `docker start sbot`
-- `docker restart sbot`
+- `docker stop ${NAME}`
+- `docker start ${NAME}`
+- `docker restart ${NAME}`
 
 ### setup auto-healer
 
@@ -159,8 +185,12 @@ docker pull ahdinosaur/healer
 ```
 
 ```shell
+cat > ~/healer <<EOF
 docker run -d --name healer \
   -v /var/run/docker.sock:/tmp/docker.sock \
   --restart unless-stopped \
   ahdinosaur/healer
+EOF
+chmod +x ~/healer
+~/healer
 ```
