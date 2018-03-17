@@ -2,7 +2,7 @@
 
 sudo apt update -y
 
-apt install -y curl apt-transport-https ca-certificates software-properties-common
+apt install -y curl dnsutils apt-transport-https ca-certificates software-properties-common
 wget https://download.docker.com/linux/debian/gpg -O docker-gpg
 sudo apt-key add docker-gpg
 echo "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee -a /etc/apt/sources.list.d/docker.list
