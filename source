@@ -1,10 +1,14 @@
+#!/bin/bash
 
+DIR=dirname "$(readlink -f "$0")"
 
-export NAME=ssb-pub
-export HOST=hostname.yourdomain.tld
+if [ -d ${DIR}/.env ]
+then
+  source ${DIR}/.env
+fi
 
 export PATH=${PATH}:${HOME}/${NAME}/bin
 
-export BYTES_PER_MEGABYTE=\$((10**6))
-export TOTAL_MEMORY_IN_BYTES=\$(free -b | awk '/Mem\:/ { print \$2 }')
-export MEMORY_LIMIT=\$((\${TOTAL_MEMORY_IN_BYTES} - \$((200 * \${BYTES_PER_MEGABYTE}))))
+export BYTES_PER_MEGABYTE=$((10**6))
+export TOTAL_MEMORY_IN_BYTES=$(free -b | awk '/Mem\:/ { print $2 }')
+export MEMORY_LIMIT=$((${TOTAL_MEMORY_IN_BYTES} - $((200 * ${BYTES_PER_MEGABYTE}))))

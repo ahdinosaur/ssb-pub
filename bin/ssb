@@ -1,8 +1,7 @@
 #!/bin/sh
 
-
 docker run -it --rm \
-  -v ${HOME}/${NAME}:/home/node/.ssb/ \
+  -v ${DATA}:/home/node/.ssb/ \
   -e ssb_host=${HOST} \
-  ahdinosaur/ssb-pub \
+  ${IMAGE} \
   $@

@@ -1,0 +1,9 @@
+#!/bin/sh
+
+docker pull ahdinosaur/healer
+
+docker run -d \
+  --name healer \
+  -v /var/run/docker.sock:/tmp/docker.sock \
+  --restart unless-stopped \
+  ahdinosaur/healer

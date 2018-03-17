@@ -32,13 +32,13 @@ ssh root@your.ip.address.here
 8) test your pub server works
 
 ```shell
-./sbot whoami
+ssb whoami
 ```
 
 9) create your first invite!
 
 ```shell
-./sbot invite.create 1
+ssb invite.create 1
 ```
 
 > ![digital-butt-step-4.png](./images/digital-butt-step-4.png)
@@ -51,41 +51,42 @@ ssh root@your.ip.address.here
 
 to run a pub you need to have a static public IP, ideally with a DNS record (i.e.`hostname.yourdomain.tld`)
 
+on a fresh Debian 9 box, as root
 
-### configuration
+### download
 
-- `NAME`
-- `HOST`
-- `IMAGE`
-- `PORT`
+```shell
+git clone https://github.com/ahdinosaur/ssb-pub ${NAME}
+cd ${NAME}
+```
+
+### configure
+
+```shell
+export HOST=hostname.yourdomain.tld
+export NAME=ssb-pub
+export IMAGE=ahdinosaur/ssb-pub
+```
+
+```shell
+source source
+```
 
 ### install
 
-on a fresh Debian 9 box, as root
-
 ```shell
-cd ${HOME}
-git clone https://github.com/ahdinosaur/ssb-pub ${NAME}
-cd ${NAME}
-./install
+ssb-pub-install
 ```
 
-### set environment
-
-```shell
-source ~/source
-echo "source \${HOME}/${NAME}/source" >> ~/.bashrc
-```
-
-this will create a data directory in ${HOME}/${NAME}
+this will create a data directory in ${HOME}/${NAME}/data
 
 > if migrating from an old server, copy your old `secret` and `gossip.json` (maybe also `blobs`) now.
 >
 > ```
-> rsync -avz /root/ssb-pub-data/blobs/sha256/ $HOST:/root/ssb-pub/data/blobs/sha256/
+> rsync -avz ${HOME}/${NAME}/blobs/sha256/ ${HOST}:${HOME}/${NAME}/data/blobs/sha256/
 > ```
 
-### start the ssb pub server
+### start server
 
 ```shell
 ssb-pub
@@ -127,17 +128,6 @@ docker stats --no-stream
 
 using [somarat/healer](https://github.com/somarat/healer)
 
-```shell
-docker pull ahdinosaur/healer
 ```
-
-```shell
-cat > ~/healer <<EOF
-docker run -d --name healer \
-  -v /var/run/docker.sock:/tmp/docker.sock \
-  --restart unless-stopped \
-  ahdinosaur/healer
-EOF
-chmod +x ~/healer
-~/healer
+ssb-pub-healer
 ```

@@ -4,7 +4,8 @@ min_size: 1gb
 config:
   #cloud-config
   packages:
-    - wget
+    - git
   runcmd:
-    - wget https://raw.githubusercontent.com/ahdinosaur/ssb-pub/master/install.sh
-    - bash install.sh
+    - git clone https://github.com/ahdinosaur/ssb-pub
+    - source ssb-pub/source
+    - ssb-pub-install
