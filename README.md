@@ -47,107 +47,54 @@ ssh root@your.ip.address.here
 
 (credit to [seven1m/do-install-button](https://github.com/seven1m/do-install-button) for the Digital Ocean installer)
 
-## advanced setup
+## manual setup
 
 to run a pub you need to have a static public IP, ideally with a DNS record (i.e.`hostname.yourdomain.tld`)
+
+
+### configuration
+
+- `NAME`
+- `HOST`
+- `IMAGE`
+- `PORT`
+
+### install
 
 on a fresh Debian 9 box, as root
 
 ```shell
-apt update
-apt upgrade -y
-apt install -y apt-transport-https ca-certificates curl software-properties-common
-wget https://download.docker.com/linux/debian/gpg -O docker-gpg
-sudo apt-key add docker-gpg
-echo "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee -a /etc/apt/sources.list.d/docker.list
-apt update
-apt install -y docker-ce
-systemctl start docker
-systemctl enable docker
-```
-
-### install image
-
-#### (option a) pull image from docker hub
-
-```shell
-docker pull ahdinosaur/ssb-pub
-```
-
-#### (option b) build image from source
-
-from GitHub:
-
-```shell
-git clone https://github.com/ahdinosaur/ssb-pub.git
-cd ssb-pub
-docker build -t ssb-pub .
+cd ${HOME}
+git clone https://github.com/ahdinosaur/ssb-pub ${NAME}
+cd ${NAME}
+./install
 ```
 
 ### set environment
 
 ```shell
-cat > ~/source <<EOF
-export NAME=ssb-pub
-export HOST=hostname.yourdomain.tld
-
-export BYTES_PER_MEGABYTE=\$((10**6))
-export TOTAL_MEMORY_IN_BYTES=\$(free -b | awk '/Mem\:/ { print \$2 }')
-export MEMORY_LIMIT=\$((\${TOTAL_MEMORY_IN_BYTES} - \$((200 * \${BYTES_PER_MEGABYTE}))))
-EOF
-
 source ~/source
-echo "source source" >> ~/.bashrc
+echo "source \${HOME}/${NAME}/source" >> ~/.bashrc
 ```
 
-### create data directory to become docker volume
-
-```shell
-mkdir /root/${NAME}
-chown -R 1000:1000 /root/${NAME}
-```
+this will create a data directory in ${HOME}/${NAME}
 
 > if migrating from an old server, copy your old `secret` and `gossip.json` (maybe also `blobs`) now.
 >
 > ```
-> rsync -avz /root/ssb-pub-data/blobs/sha256/ $HOST:/root/ssb-pub-data/blobs/sha256/
+> rsync -avz /root/ssb-pub-data/blobs/sha256/ $HOST:/root/ssb-pub/data/blobs/sha256/
 > ```
 
-### initialize the pub
+### start the ssb pub server
 
 ```shell
-cat > ~/init <<EOF
-docker run -d --name \${NAME} \
-   -v /root/\${NAME}/:/home/node/.ssb/ \
-   -e ssb_host=\${HOST} \
-   -p 8008:8008 \
-   --restart unless-stopped \
-   --memory \${MEMORY_LIMIT} \
-   ahdinosaur/ssb-pub
-EOF
-chmod +x ~/init
-~/init
+ssb-pub
 ```
-
-where
-
-- `--memory` sets an upper memory limit of your total memory minus 200 MB (for example: on a 1 GB server this could be simplified to `--memory 800m`)
 
 ### send a request to the server
 
 ```shell
-cat > ~/sbot <<EOF
-docker run -it --rm \
-  -v /root/\${NAME}/:/home/node/.ssb/ \
-  -e ssb_host=\${HOST} \
-  ahdinosaur/ssb-pub \
-  \$@
-EOF
-chmod +x ~/sbot
-```
-
-```shell
-~/sbot whoami
+ssb whoami
 ```
 
 ### create invites
@@ -155,13 +102,13 @@ chmod +x ~/sbot
 from your remote machine (as root)
 
 ```shell
-~/sbot invite.create 1
+ssb invite.create 1
 ```
 
 from your local machine, using ssh
 
 ```shell
-ssh root@hostname.yourdomain.tld ./sbot invite.create 1
+ssh root@hostname.yourdomain.tld ssb invite.create 1
 ```
 
 ### check the stats

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+mkdir -p /root/${NAME}
+
+chown -R 1000:1000 /root/${NAME}
+
+docker run -d --name ${NAME} \
+   -v /root/${NAME}/:/home/node/.ssb/ \
+   -e ssb_host=${HOST} \
+   -p 8008:8008 \
+   --restart unless-stopped \
+# `--memory` sets an upper memory limit of your total memory minus 200 MB (for example: on a 1 GB server this could be simplified to `--memory 800m`)
+   --memory ${MEMORY_LIMIT} \
+   ahdinosaur/ssb-pub
+EOF
