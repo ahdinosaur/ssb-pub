@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 sudo apt update -y
 
@@ -20,7 +20,9 @@ export NAME=${NAME:-ssb-pub}
 export HOST=${HOST:-${IPV4}}
 EOF
 
-source source
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source ${DIR}/source
 
 docker pull ${IMAGE}
 mkdir -p ${DATA}
