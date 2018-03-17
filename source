@@ -7,6 +7,9 @@ then
   source ${DIR}/.env
 fi
 
+export DATA=${DATA:-${HOME}/${NAME}/data}
+export IMAGE=${IMAGE:-ahdinosaur/ssb-pub}
+
 export PATH=${PATH}:${HOME}/${NAME}/bin
 
 export BYTES_PER_MEGABYTE=$((10**6))
