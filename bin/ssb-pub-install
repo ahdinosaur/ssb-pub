@@ -7,7 +7,8 @@ wget https://download.docker.com/linux/debian/gpg -O docker-gpg
 sudo apt-key add docker-gpg
 echo "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee -a /etc/apt/sources.list.d/docker.list
 
-sudo apt install -y docker
+sudo apt update -y
+sudo apt install -y docker-ce
 sudo systemctl start docker
 sudo systemctl enable docker
 
@@ -19,7 +20,7 @@ export NAME=${NAME:-ssb-pub}
 export HOST=${HOST:-${IPV4}}
 EOF
 
-source .env
+source source
 
 docker pull ${IMAGE}
 mkdir -p ${DATA}
