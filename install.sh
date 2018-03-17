@@ -12,7 +12,7 @@ sudo systemctl enable docker
 docker pull ahdinosaur/ssb-pub
 mkdir ~/ssb-pub-data
 chown -R 1000:1000 ~/ssb-pub-data
-docker run -d --name sbot -v ~/ssb-pub-data/:/home/node/.ssb/ -e ssb_host="$(dig +short myip.opendns.com @resolver1.opendns.com)" -p 8008:8008 --restart unless-stopped ahdinosaur/ssb-pub
+docker run -d --name sbot -v ~/ssb-pub-data/:/home/node/.ssb/ -e ssb_host="$(dig +short myip.opendns.com @resolver1.opendns.com)" -p 8008:8008 --restart unless-stopped --memory=$(($(free -b --si | awk '/Mem\:/ { print $2 }') - 200*(10**6))) ahdinosaur/ssb-pub
 docker pull ahdinosaur/healer
 docker run -d --name healer -v /var/run/docker.sock:/tmp/docker.sock --restart unless-stopped ahdinosaur/healer
 echo "docker run -it --rm -v ~/ssb-pub-data/:/home/node/.ssb/ -e ssb_host="$(dig +short myip.opendns.com @resolver1.opendns.com)" ahdinosaur/ssb-pub \$@" > ~/sbot

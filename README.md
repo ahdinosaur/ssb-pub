@@ -107,9 +107,15 @@ ssb_host=<hostname.yourdomain.tld>
 docker run -d --name sbot \
    -v /root/ssb-pub-data/:/home/node/.ssb/ \
    -e ssb_host="$ssb_host" \
-   -p 8008:8008 --restart unless-stopped \
+   -p 8008:8008 \
+   --restart unless-stopped \
+   --memory $(($(free -b --si | awk '/Mem\:/ { print $2 }') - 200*(10**6))) \
    ahdinosaur/ssb-pub
 ```
+
+where
+
+- `--memory` sets an upper memory limit of your total memory minus 200 MB (for example: on a 1 GB server this could be simplified to `--memory 800m`)
 
 ### create invites
 
