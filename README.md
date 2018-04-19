@@ -89,14 +89,14 @@ docker build -t ssb-pub .
 #### step 1. create a directory on the docker host for persisting the pub's data
 
 ```shell
-mkdir /root/ssb-pub-data
-chown -R 1000:1000 /root/ssb-pub-data
+mkdir ~/ssb-pub-data
+chown -R 1000:1000 ~/ssb-pub-data
 ```
 
 > if migrating from an old server, copy your old `secret` and `gossip.json` (maybe also `blobs`) now.
 >
 > ```
-> rsync -avz /root/ssb-pub-data/blobs/sha256/ $HOST:/root/ssb-pub-data/blobs/sha256/
+> rsync -avz ~/ssb-pub-data/blobs/sha256/ $HOST:~/ssb-pub-data/blobs/sha256/
 > ```
 
 #### step 2. run the container
@@ -105,7 +105,7 @@ chown -R 1000:1000 /root/ssb-pub-data
 ssb_host=<hostname.yourdomain.tld>
 
 docker run -d --name sbot \
-   -v /root/ssb-pub-data/:/home/node/.ssb/ \
+   -v ~/ssb-pub-data/:/home/node/.ssb/ \
    -e ssb_host="$ssb_host" \
    -p 8008:8008 \
    --restart unless-stopped \
@@ -125,7 +125,7 @@ from your remote machine
 ssb_host=<hostname.yourdomain.tld>
 
 docker run -it --rm \
-   -v /root/ssb-pub-data/:/home/node/.ssb/ \
+   -v ~/ssb-pub-data/:/home/node/.ssb/ \
    -e ssb_host="$ssb_host" \
    ahdinosaur/ssb-pub \
    invite.create 1
@@ -138,7 +138,7 @@ ssb_host=<hostname.yourdomain.tld>
 
 ssh root@$ssb_host \
   docker run --rm \
-     -v /root/ssb-pub-data/:/home/node/.ssb/ \
+     -v ~/ssb-pub-data/:/home/node/.ssb/ \
      -e ssb_host="$ssb_host" \
      ahdinosaur/ssb-pub \
      invite.create 1
