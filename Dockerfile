@@ -9,7 +9,7 @@ ENV PATH=/home/node/.npm-global/bin:$PATH
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 
 USER node
-RUN npm install -g scuttlebot@11.2.1
+RUN npm install -g scuttlebot@11.3.0
 
 EXPOSE 8008
 
