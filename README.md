@@ -6,6 +6,21 @@ if you feel like sharing your pub, please add it to [the informal registry of pu
 
 :heart:
 
+## table of contents
+
+- [one-click setup](#one-click-setup)
+- [manual setup](#manual-setup)
+  - [install docker](#install-docker)
+  - [install `ssb-pub` image](#install-ssb-pub-image)
+  - [create `sbot` container](#create-sbot-container)
+  - [setup auto-healer](#setup-auto-healer)
+  - [ensure containers are always running](#ensure-containers-are-always-running)
+  - [(optional) add `ssb-viewer` plugin)(#optional-add-ssb-viewer)
+- [command and control](#command-and-control)
+  - [create invites](#create-invites)
+  - [stop, start, restart containers)(#stop-start-restart-containers)
+  - [update `ssb-pub` image)(#update-ssb-pub-image)
+
 ## one-click setup
 
 1) go to [![Install on DigitalOcean](http://butt.nz/button.svg)](http://butt.nz) at [butt.nz](http://butt.nz)
@@ -47,7 +62,9 @@ ssh root@your.ip.address.here
 
 (credit to [seven1m/do-install-button](https://github.com/seven1m/do-install-button) for the Digital Ocean installer)
 
-## advanced setup
+## manual setup
+
+### install docker
 
 to run a pub you need to have a static public IP, ideally with a DNS record (i.e.`<hostname.yourdomain.tld>`)
 
@@ -66,7 +83,7 @@ systemctl start docker
 systemctl enable docker
 ```
 
-### install image
+### install `ssb-pub` image
 
 #### (option a) pull image from docker hub
 
@@ -84,7 +101,7 @@ cd ssb-pub
 docker build -t ssb-pub .
 ```
 
-### start service
+### create `sbot` container
 
 #### step 1. create a directory on the docker host for persisting the pub's data
 
@@ -101,58 +118,67 @@ chown -R 1000:1000 ~/ssb-pub-data
 
 #### step 2. run the container
 
+create a `./create-sbot` script:
+
 ```shell
+cat > ./create-sbot <<EOF
+#!/bin/sh
+
 ssb_host=<hostname.yourdomain.tld>
+memory_limit=$(($(free -b --si | awk '/Mem\:/ { print $2 }') - 200*(10**6)))
 
 docker run -d --name sbot \
    -v ~/ssb-pub-data/:/home/node/.ssb/ \
-   -e ssb_host="$ssb_host" \
+   -e ssb_host="\$ssb_host" \
    -p 8008:8008 \
    --restart unless-stopped \
-   --memory $(($(free -b --si | awk '/Mem\:/ { print $2 }') - 200*(10**6))) \
+   --memory "\$memory_limit" \
    ahdinosaur/ssb-pub
+EOF
 ```
 
 where
 
 - `--memory` sets an upper memory limit of your total memory minus 200 MB (for example: on a 1 GB server this could be simplified to `--memory 800m`)
 
-### create invites
-
-from your remote machine
+then
 
 ```shell
-ssb_host=<hostname.yourdomain.tld>
-
-docker run -it --rm \
-   -v ~/ssb-pub-data/:/home/node/.ssb/ \
-   -e ssb_host="$ssb_host" \
-   ahdinosaur/ssb-pub \
-   invite.create 1
+# make the script executable
+chmod +x ./create-sbot
+# run the script
+./create-sbot
 ```
 
-from your local machine, using ssh
+#### step 3. create `./sbot` script
+
+we will now create a shell script in `./sbot` to help us command our Scuttlebutt server running:
 
 ```shell
-ssb_host=<hostname.yourdomain.tld>
+# create the script
+cat > ./sbot <<EOF
+#!/bin/sh
 
-ssh root@$ssb_host \
-  docker run --rm \
-     -v ~/ssb-pub-data/:/home/node/.ssb/ \
-     -e ssb_host="$ssb_host" \
-     ahdinosaur/ssb-pub \
-     invite.create 1
+docker exec -it sbot sbot \$@
+EOF
 ```
 
-### control service
+then
 
-- `docker stop sbot`
-- `docker start sbot`
-- `docker restart sbot`
+```shell
+# make the script executable
+chmod +x ./sbot
+# test the script
+./sbot whoami
+```
 
 ### setup auto-healer
 
-using [somarat/healer](https://github.com/somarat/healer)
+the `ssb-pub` has a built-in health check: `sbot whoami`.
+
+when `sbot` becomes unhealthy (it will!), we want to kill the container, so it will be automatically restarted by Docker.
+
+for this situation, we will use [somarat/healer](https://github.com/somarat/healer):
 
 ```shell
 docker pull ahdinosaur/healer
@@ -163,4 +189,94 @@ docker run -d --name healer \
   -v /var/run/docker.sock:/tmp/docker.sock \
   --restart unless-stopped \
   ahdinosaur/healer
+```
+
+### ensure containers are always running
+
+sometimes the `sbot` or `healer` containers will stop running (despite `--restart unless-stopped`!).
+
+for this sitaution, we will setup a cron job script:
+
+TODO
+
+### (optional) add `ssb-viewer` plugin
+
+enter your `sbot` container with:
+
+```shell
+docker exec -it sbot bash
+```
+
+then run:
+
+```shell
+npm install -g git-ssb
+mkdir -p ~/.ssb/node_modules
+cd ~/.ssb/node_modules
+git clone ssb://%MeCTQrz9uszf9EZoTnKCeFeIedhnKWuB3JHW2l1g9NA=.sha256 ssb-viewer
+cd ssb-viewer
+npm install
+sbot plugins.enable ssb-viewer
+```
+
+edit your config to include
+
+```json
+{
+  "plugins": {
+    "ssb-viewer": true
+  },
+  "viewer": {
+    "host": "0.0.0.0"
+  }
+}
+```
+
+edit your `./create-sbot` to include `-p 8807:8807`.
+
+stop, remove, and re-create sbot:
+
+```shell
+docker stop sbot
+docker rm sbot
+./create-sbot
+```
+
+## command and control
+
+### create invites
+
+from your server:
+
+```shell
+./sbot invite.create 1
+```
+
+from your local machine, using ssh:
+
+```shell
+ssh -t root@server ./sbot invite.create 1
+```
+
+### start, stop, restart containers
+
+for `sbot`
+
+- `docker stop sbot`
+- `docker start sbot`
+- `docker restart sbot`
+
+for `healer`
+
+- `docker stop healer`
+- `docker start healer`
+- `docker restart healer`
+
+### update `ssb-pub` image
+
+```shell
+docker pull ahdinosaur/ssb-pub
+docker stop sbot
+docker rm sbot
+./create-sbot
 ```
