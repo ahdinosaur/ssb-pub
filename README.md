@@ -15,11 +15,11 @@ if you feel like sharing your pub, please add it to [the informal registry of pu
   - [create `sbot` container](#create-sbot-container)
   - [setup auto-healer](#setup-auto-healer)
   - [ensure containers are always running](#ensure-containers-are-always-running)
-  - [(optional) add `ssb-viewer` plugin)(#optional-add-ssb-viewer)
+  - [(optional) add `ssb-viewer` plugin](#optional-add-ssb-viewer)
 - [command and control](#command-and-control)
   - [create invites](#create-invites)
-  - [stop, start, restart containers)(#stop-start-restart-containers)
-  - [update `ssb-pub` image)(#update-ssb-pub-image)
+  - [stop, start, restart containers](#stop-start-restart-containers)
+  - [update `ssb-pub` image](#update-ssb-pub-image)
 
 ## one-click setup
 
@@ -59,6 +59,30 @@ ssh root@your.ip.address.here
 > ![digital-butt-step-4.png](./images/digital-butt-step-4.png)
 
 10) invite and host your friends on [Scuttlebutt](https://www.scuttlebutt.nz) :house_with_garden:
+
+> 11) give your pub a name and description
+> 
+> ```
+> ./sbot publish --type about --about "@your.pubs.id.here" --name "Pubby McPubFace" --description "everyone should have a pub, this is mine"
+> ```
+>
+> 12) setup your pub's domain name
+>
+> point a domain name (example.com) to your pub server's IP address (using a DNS A record)
+>
+> edit `./create-sbot` to change `host` definition to say `host=example.com` where `example.com` is your domain name.
+>
+> ```shell
+> nano ./create-sbot
+> ```
+>
+> then stop, remove, and re-create sbot:
+>
+> ```shell
+> docker stop sbot
+> docker rm sbot
+> ./create-sbot
+> ```
 
 (credit to [seven1m/do-install-button](https://github.com/seven1m/do-install-button) for the Digital Ocean installer)
 
