@@ -5,6 +5,7 @@ cd ~
 #
 # install docker
 #
+sudo apt update
 sudo apt install -y curl dnsutils apt-transport-https ca-certificates software-properties-common
 wget https://download.docker.com/linux/debian/gpg -O docker-gpg
 sudo apt-key add docker-gpg
@@ -53,7 +54,7 @@ chmod +x ./create-sbot
 cat > ./sbot <<EOF
 #!/bin/sh
 
-docker exec -it sbot sbot \$@
+docker exec -it sbot sbot "\$@"
 EOF
 
 # make the script executable
