@@ -1,3 +1,0 @@
-#!/bin/sh
-
-docker run -it --rm -v /root/ssb-pub-data/:/home/node/.ssb/ -e ssb_host=$(dig +short myip.opendns.com @resolver1.opendns.com) ahdinosaur/ssb-pub $@
