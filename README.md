@@ -222,8 +222,8 @@ sometimes the `sbot` or `healer` containers will stop running (despite `--restar
 for this sitaution, we will setup two cron job scripts:
 
 ```shell
-echo "docker start sbot" | tee /etc/cron.hourly/sbot && chmod +x /etc/cron.hourly/sbot
-echo "docker start healer" | tee /etc/cron.hourly/healer && chmod +x /etc/cron.hourly/healer
+printf '#!/bin/sh\n\ndocker start sbot\n' | tee /etc/cron.hourly/sbot && chmod +x /etc/cron.hourly/sbot
+printf '#!/bin/sh\n\ndocker start healer\n' | tee /etc/cron.hourly/healer && chmod +x /etc/cron.hourly/healer
 ```
 
 because `docker start <service>` is [idempotent](https://en.wikipedia.org/wiki/Idempotent), it will not change anything if the service is already running, but if the service is not running it will start it.
