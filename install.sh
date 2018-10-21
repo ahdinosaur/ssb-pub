@@ -70,5 +70,5 @@ docker run -d --name healer \
   ahdinosaur/healer
 
 # ensure containers are always running
-echo "docker start sbot" | tee /etc/cron.hourly/sbot && chmod +x /etc/cron.hourly/sbot
-echo "docker start healer" | tee /etc/cron.hourly/healer && chmod +x /etc/cron.hourly/healer
+printf '#!/bin/sh\n\ndocker start sbot\n' | tee /etc/cron.hourly/sbot && chmod +x /etc/cron.hourly/sbot
+printf '#!/bin/sh\n\ndocker start healer\n' | tee /etc/cron.hourly/healer && chmod +x /etc/cron.hourly/healer
