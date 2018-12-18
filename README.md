@@ -146,7 +146,7 @@ create a `./create-sbot` script:
 
 ```shell
 cat > ./create-sbot <<EOF
-#!/bin/sh
+#!/bin/bash
 
 ssb_host=<hostname.yourdomain.tld>
 memory_limit=$(($(free -b --si | awk '/Mem\:/ { print $2 }') - 200*(10**6)))
