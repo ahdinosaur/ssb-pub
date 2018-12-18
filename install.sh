@@ -32,7 +32,7 @@ chown -R 1000:1000 ~/ssb-pub-data
 
 # create ./create-sbot script
 cat > ./create-sbot <<EOF
-#!/bin/sh
+#!/bin/bash
 
 ssb_host=$(dig +short myip.opendns.com @resolver1.opendns.com)
 memory_limit=$(($(free -b --si | awk '/Mem\:/ { print $2 }') - 200*(10**6)))
