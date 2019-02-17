@@ -70,18 +70,37 @@ ssh root@your.ip.address.here
 >
 > point a domain name (example.com) to your pub server's IP address (using a DNS A record)
 >
-> edit `./create-sbot` to change `host` definition to say `host=example.com` where `example.com` is your domain name.
+> edit `~/ssb-pub-data/config` to change the `connections.incoming.net[].external` property from your server ip address to your domain name:
 >
-> ```shell
-> nano ./create-sbot
+> ```json
+> {
+>   "connections": {
+>     "incoming": {
+>       "net": [
+>         {
+>           "scope": "public",
+>           "host": "0.0.0.0",
+>           "external": ["hostname.yourdomain.tld"]
+>           "transform": "shs",
+>           "port": 8008
+>         }
+>       ]
+>     },
+>     "outgoing": {
+>       "net": [
+>         {
+>           "transform": "shs"
+>         }
+>       ]
+>     }
+>   }
+> }
 > ```
 >
-> then stop, remove, and re-create sbot:
+> then restart sbot:
 >
 > ```shell
-> docker stop sbot
-> docker rm sbot
-> ./create-sbot
+> docker restart sbot
 > ```
 
 (credit to [seven1m/do-install-button](https://github.com/seven1m/do-install-button) for the Digital Ocean installer)
@@ -140,7 +159,37 @@ chown -R 1000:1000 ~/ssb-pub-data
 > rsync -avz ~/ssb-pub-data/blobs/sha256/ $HOST:~/ssb-pub-data/blobs/sha256/
 > ```
 
-#### step 2. run the container
+#### step 2. setup ssb config
+
+```shell
+EXTERNAL=<hostname.yourdomain.tld>
+
+cat > ~/ssb-pub-data/config <<EOF
+{
+  "connections": {
+    "incoming": {
+      "net": [
+        {
+          "scope": "public",
+          "host": "0.0.0.0",
+          "external": ["${EXTERNAL}"],
+          "transform": "shs",
+          "port": 8008
+        }
+      ]
+    },
+    "outgoing": {
+      "net": [
+        {
+          "transform": "shs"
+        }
+      ]
+    }
+  }
+}
+```
+
+#### step 3. run the container
 
 create a `./create-sbot` script:
 
@@ -148,12 +197,10 @@ create a `./create-sbot` script:
 cat > ./create-sbot <<EOF
 #!/bin/bash
 
-ssb_host=<hostname.yourdomain.tld>
-memory_limit=$(($(free -b --si | awk '/Mem\:/ { print $2 }') - 200*(10**6)))
+memory_limit="\$((\$(free -b --si | awk '/Mem\:/ { print $2 }') - 200*(10**6)))"
 
 docker run -d --name sbot \
    -v ~/ssb-pub-data/:/home/node/.ssb/ \
-   -e ssb_host="\$ssb_host" \
    -p 8008:8008 \
    --restart unless-stopped \
    --memory "\$memory_limit" \
@@ -174,7 +221,7 @@ chmod +x ./create-sbot
 ./create-sbot
 ```
 
-#### step 3. create `./sbot` script
+#### step 4. create `./sbot` script
 
 we will now create a shell script in `./sbot` to help us command our Scuttlebutt server running:
 
@@ -307,5 +354,6 @@ for `healer`
 docker pull ahdinosaur/ssb-pub
 docker stop sbot
 docker rm sbot
+# edit ~/ssb-pub-data/config if necessary
 ./create-sbot
 ```
