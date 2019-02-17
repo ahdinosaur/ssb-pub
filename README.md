@@ -187,6 +187,7 @@ cat > ~/ssb-pub-data/config <<EOF
     }
   }
 }
+EOF
 ```
 
 #### step 3. run the container
