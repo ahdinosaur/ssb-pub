@@ -141,7 +141,7 @@ from GitHub:
 ```shell
 git clone https://github.com/ahdinosaur/ssb-pub.git
 cd ssb-pub
-docker build -t ssb-pub .
+docker build -t ahdinosaur/ssb-pub .
 ```
 
 ### create `sbot` container
