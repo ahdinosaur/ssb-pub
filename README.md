@@ -198,7 +198,7 @@ create a `./create-sbot` script:
 cat > ./create-sbot <<EOF
 #!/bin/bash
 
-memory_limit="\$((\$(free -b --si | awk '/Mem\:/ { print $2 }') - 200*(10**6)))"
+memory_limit="\$((\$(free -b --si | awk '/Mem\:/ { print \$2 }') - 200*(10**6)))"
 
 docker run -d --name sbot \
    -v ~/ssb-pub-data/:/home/node/.ssb/ \
