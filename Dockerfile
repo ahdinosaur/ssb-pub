@@ -11,7 +11,7 @@ ENV PATH=/home/node/.npm-global/bin:$PATH
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 
 USER node
-RUN npm install -g ssb-server@14.1.2
+RUN npm install -g scuttlebot-release@13.0.0-2
 
 EXPOSE 8008
 
@@ -19,5 +19,5 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=10s --retries=10 \
   CMD sbot whoami || exit 1
 ENV HEALING_ACTION RESTART
 
-ENTRYPOINT [ "/tini", "--", "ssb-server" ]
-CMD [ "start" ]
+ENTRYPOINT [ "/tini", "--", "sbot" ]
+CMD [ "server" ]
