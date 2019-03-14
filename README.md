@@ -4,6 +4,8 @@ easily host your own [Secure ScuttleButt (SSB)](https://www.scuttlebutt.nz) pub 
 
 if you feel like sharing your pub, please add it to [the informal registry of pubs](https://github.com/ssbc/scuttlebot/wiki/Pub-Servers) as request-only or with a re-usable invite (`invite.create 1000`)!
 
+(if you are running a v1 pub, [migrate to the latest v2!](#migrating-from-v1-to-v2) :tada: )
+
 :heart:
 
 ## table of contents
@@ -19,7 +21,9 @@ if you feel like sharing your pub, please add it to [the informal registry of pu
 - [command and control](#command-and-control)
   - [create invites](#create-invites)
   - [stop, start, restart containers](#stop-start-restart-containers)
+- [upgrading](#upgrading)
   - [update `ssb-pub` image](#update-ssb-pub-image)
+  - [migrating from v1 to v2](#migrating-from-v1-to-v2)
 
 ## one-click setup
 
@@ -349,6 +353,8 @@ for `healer`
 - `docker start healer`
 - `docker restart healer`
 
+## upgrading
+
 ### update `ssb-pub` image
 
 ```shell
@@ -358,3 +364,16 @@ docker rm sbot
 # edit ~/ssb-pub-data/config if necessary
 ./create-sbot
 ```
+
+### migrating from `v1` to `v2`
+
+for a `v1` pub owner to update to the latest `v2` version of `ssb-pub`:
+
+1. pull the latest v2 image: `docker pull ahdinosaur/ssb-pub`
+2. stop sbot container: `docker stop sbot`
+3. remove sbot container: `docker rm sbot`
+4. [create `~/ssb-pub-data/config`](#step-2-setup-ssb-config)
+5. [re-create `./create-sbot`](#step-3-run-the-container)
+6. `./create-sbot`
+
+check things are working with `docker logs sbot` and `./sbot whoami` :tada:
