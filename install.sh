@@ -27,6 +27,35 @@ mkdir ~/ssb-pub-data
 chown -R 1000:1000 ~/ssb-pub-data
 
 #
+# setup sbot config
+#
+EXTERNAL=$(dig +short myip.opendns.com @resolver1.opendns.com)
+cat > ~/ssb-pub-data/config <<EOF
+{
+  "connections": {
+    "incoming": {
+      "net": [
+        {
+          "scope": "public",
+          "host": "0.0.0.0",
+          "external": ["${EXTERNAL}"],
+          "transform": "shs",
+          "port": 8008
+        }
+      ]
+    },
+    "outgoing": {
+      "net": [
+        {
+          "transform": "shs"
+        }
+      ]
+    }
+  }
+}
+EOF
+
+#
 # create sbot container
 #
 
@@ -34,12 +63,10 @@ chown -R 1000:1000 ~/ssb-pub-data
 cat > ./create-sbot <<EOF
 #!/bin/bash
 
-ssb_host=$(dig +short myip.opendns.com @resolver1.opendns.com)
 memory_limit=$(($(free -b --si | awk '/Mem\:/ { print $2 }') - 200*(10**6)))
 
 docker run -d --name sbot \
    -v ~/ssb-pub-data/:/home/node/.ssb/ \
-   -e ssb_host="\$ssb_host" \
    -p 8008:8008 \
    --restart unless-stopped \
    --memory "\$memory_limit" \

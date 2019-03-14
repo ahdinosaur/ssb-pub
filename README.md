@@ -4,6 +4,8 @@ easily host your own [Secure ScuttleButt (SSB)](https://www.scuttlebutt.nz) pub 
 
 if you feel like sharing your pub, please add it to [the informal registry of pubs](https://github.com/ssbc/scuttlebot/wiki/Pub-Servers) as request-only or with a re-usable invite (`invite.create 1000`)!
 
+(if you are running a v1 pub, [migrate to the latest v2!](#migrating-from-v1-to-v2) :tada: )
+
 :heart:
 
 ## table of contents
@@ -19,7 +21,9 @@ if you feel like sharing your pub, please add it to [the informal registry of pu
 - [command and control](#command-and-control)
   - [create invites](#create-invites)
   - [stop, start, restart containers](#stop-start-restart-containers)
+- [upgrading](#upgrading)
   - [update `ssb-pub` image](#update-ssb-pub-image)
+  - [migrating from v1 to v2](#migrating-from-v1-to-v2)
 
 ## one-click setup
 
@@ -70,18 +74,37 @@ ssh root@your.ip.address.here
 >
 > point a domain name (example.com) to your pub server's IP address (using a DNS A record)
 >
-> edit `./create-sbot` to change `host` definition to say `host=example.com` where `example.com` is your domain name.
+> edit `~/ssb-pub-data/config` to change the `connections.incoming.net[].external` property from your server ip address to your domain name:
 >
-> ```shell
-> nano ./create-sbot
+> ```json
+> {
+>   "connections": {
+>     "incoming": {
+>       "net": [
+>         {
+>           "scope": "public",
+>           "host": "0.0.0.0",
+>           "external": ["hostname.yourdomain.tld"]
+>           "transform": "shs",
+>           "port": 8008
+>         }
+>       ]
+>     },
+>     "outgoing": {
+>       "net": [
+>         {
+>           "transform": "shs"
+>         }
+>       ]
+>     }
+>   }
+> }
 > ```
 >
-> then stop, remove, and re-create sbot:
+> then restart sbot:
 >
 > ```shell
-> docker stop sbot
-> docker rm sbot
-> ./create-sbot
+> docker restart sbot
 > ```
 
 (credit to [seven1m/do-install-button](https://github.com/seven1m/do-install-button) for the Digital Ocean installer)
@@ -122,7 +145,7 @@ from GitHub:
 ```shell
 git clone https://github.com/ahdinosaur/ssb-pub.git
 cd ssb-pub
-docker build -t ssb-pub .
+docker build -t ahdinosaur/ssb-pub .
 ```
 
 ### create `sbot` container
@@ -140,7 +163,38 @@ chown -R 1000:1000 ~/ssb-pub-data
 > rsync -avz ~/ssb-pub-data/blobs/sha256/ $HOST:~/ssb-pub-data/blobs/sha256/
 > ```
 
-#### step 2. run the container
+#### step 2. setup ssb config
+
+```shell
+EXTERNAL=<hostname.yourdomain.tld>
+
+cat > ~/ssb-pub-data/config <<EOF
+{
+  "connections": {
+    "incoming": {
+      "net": [
+        {
+          "scope": "public",
+          "host": "0.0.0.0",
+          "external": ["${EXTERNAL}"],
+          "transform": "shs",
+          "port": 8008
+        }
+      ]
+    },
+    "outgoing": {
+      "net": [
+        {
+          "transform": "shs"
+        }
+      ]
+    }
+  }
+}
+EOF
+```
+
+#### step 3. run the container
 
 create a `./create-sbot` script:
 
@@ -148,12 +202,10 @@ create a `./create-sbot` script:
 cat > ./create-sbot <<EOF
 #!/bin/bash
 
-ssb_host=<hostname.yourdomain.tld>
-memory_limit=$(($(free -b --si | awk '/Mem\:/ { print $2 }') - 200*(10**6)))
+memory_limit="\$((\$(free -b --si | awk '/Mem\:/ { print \$2 }') - 200*(10**6)))"
 
 docker run -d --name sbot \
    -v ~/ssb-pub-data/:/home/node/.ssb/ \
-   -e ssb_host="\$ssb_host" \
    -p 8008:8008 \
    --restart unless-stopped \
    --memory "\$memory_limit" \
@@ -174,7 +226,7 @@ chmod +x ./create-sbot
 ./create-sbot
 ```
 
-#### step 3. create `./sbot` script
+#### step 4. create `./sbot` script
 
 we will now create a shell script in `./sbot` to help us command our Scuttlebutt server running:
 
@@ -301,11 +353,27 @@ for `healer`
 - `docker start healer`
 - `docker restart healer`
 
+## upgrading
+
 ### update `ssb-pub` image
 
 ```shell
 docker pull ahdinosaur/ssb-pub
 docker stop sbot
 docker rm sbot
+# edit ~/ssb-pub-data/config if necessary
 ./create-sbot
 ```
+
+### migrating from `v1` to `v2`
+
+for a `v1` pub owner to update to the latest `v2` version of `ssb-pub`:
+
+1. pull the latest v2 image: `docker pull ahdinosaur/ssb-pub`
+2. stop sbot container: `docker stop sbot`
+3. remove sbot container: `docker rm sbot`
+4. [create `~/ssb-pub-data/config`](#step-2-setup-ssb-config)
+5. [re-create `./create-sbot`](#step-3-run-the-container)
+6. `./create-sbot`
+
+check things are working with `docker logs sbot` and `./sbot whoami` :tada:
