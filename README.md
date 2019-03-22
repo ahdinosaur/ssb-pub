@@ -84,7 +84,7 @@ ssh root@your.ip.address.here
 >         {
 >           "scope": "public",
 >           "host": "0.0.0.0",
->           "external": ["hostname.yourdomain.tld"]
+>           "external": ["hostname.yourdomain.tld"],
 >           "transform": "shs",
 >           "port": 8008
 >         }
