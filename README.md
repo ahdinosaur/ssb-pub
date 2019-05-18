@@ -2,7 +2,7 @@
 
 easily host your own [Secure ScuttleButt (SSB)](https://www.scuttlebutt.nz) pub in a docker container
 
-if you feel like sharing your pub, please add it to [the informal registry of pubs](https://github.com/ssbc/scuttlebot/wiki/Pub-Servers) as request-only or with a re-usable invite (`invite.create 1000`)!
+if you feel like sharing your pub, please add it to [the informal registry of pubs](https://github.com/ssbc/scuttlebot/wiki/Pub-Servers) as a private pub with your contact details so newbies may request an invite from you!
 
 (if you are running a v1 pub, [migrate to the latest v2!](#migrating-from-v1-to-v2) :tada: )
 
