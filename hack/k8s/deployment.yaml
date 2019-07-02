@@ -29,6 +29,36 @@ spec:
       storage: 5Gi
   storageClassName: do-block-storage
 ---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: ssb-config
+  namespace: scuttlebutt
+data:
+  config: | 
+    {
+      "connections": {
+        "incoming": {
+          "net": [
+            {
+              "scope": "public",
+              "host": "0.0.0.0",
+              "external": "ssb.vexingworkshop.com",
+              "transform": "shs",
+              "port": 8008
+            }
+          ]
+        },
+        "outgoing": {
+          "net": [
+            {
+              "transform": "shs"
+            }
+          ]
+        }
+      }
+    }
+---
 kind: Deployment
 apiVersion: apps/v1
 metadata:
@@ -60,7 +90,13 @@ spec:
           volumeMounts:
             - name: ssb-pub-volume
               mountPath: "/home/node/.ssb"
+            - name: ssb-pub-config
+              mountPath: "/home/node/.ssb/config"
       volumes:
         - name: ssb-pub-volume
           persistentVolumeClaim:
             claimName: ssb-pvc
+        - name: ssb-pub-config
+          configMap:
+            name: ssb-config
+
