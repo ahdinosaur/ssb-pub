@@ -18,6 +18,7 @@ if you feel like sharing your pub, please add it to [the informal registry of pu
   - [setup auto-healer](#setup-auto-healer)
   - [ensure containers are always running](#ensure-containers-are-always-running)
   - [(optional) add `ssb-viewer` plugin](#optional-add-ssb-viewer)
+- [kubernetes setup](#kubernetes-setup)
 - [command and control](#command-and-control)
   - [create invites](#create-invites)
   - [stop, start, restart containers](#stop-start-restart-containers)
@@ -322,6 +323,10 @@ docker stop sbot
 docker rm sbot
 ./create-sbot
 ```
+
+## kubernetes setup
+
+Yaml config files for Kubernetes are included in this repository.
 
 ## command and control
 
