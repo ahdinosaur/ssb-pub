@@ -92,6 +92,13 @@ spec:
               mountPath: "/home/node/.ssb"
             - name: ssb-pub-config
               mountPath: "/home/node/.ssb/config"
+      initContainers:
+        - name: ssb-datastore-permissions-fix
+          image: busybox
+          command: ["/bin/chmod", "-R", "777", "/data"]
+          volumeMounts:
+            - name: ssb-pub-volume
+              mountPath: "/data"
       volumes:
         - name: ssb-pub-volume
           persistentVolumeClaim:
@@ -99,4 +106,3 @@ spec:
         - name: ssb-pub-config
           configMap:
             name: ssb-config
-
