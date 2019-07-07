@@ -1,7 +1,0 @@
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: tcp-services
-  namespace: scuttlebutt
-data:
-  8008: "scuttlebutt/ssb-pub:8008"

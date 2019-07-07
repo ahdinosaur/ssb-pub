@@ -9,6 +9,7 @@ metadata:
   name: ssb-pub
   namespace: scuttlebutt
 spec:
+  type: LoadBalancer
   selector:
     app: ssb-pub
   ports:
@@ -43,7 +44,7 @@ data:
             {
               "scope": "public",
               "host": "0.0.0.0",
-              "external": "ssb.vexingworkshop.com",
+              "external": "your.pub.domain or IP",
               "transform": "shs",
               "port": 8008
             }
@@ -92,6 +93,7 @@ spec:
               mountPath: "/home/node/.ssb"
             - name: ssb-pub-config
               mountPath: "/home/node/.ssb/config"
+              subPath: "config"
       initContainers:
         - name: ssb-datastore-permissions-fix
           image: busybox

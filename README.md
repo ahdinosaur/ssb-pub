@@ -326,7 +326,44 @@ docker rm sbot
 
 ## kubernetes setup
 
-Yaml config files for Kubernetes are included in this repository.
+Yaml config files for Kubernetes are included in this repository at
+`hack/k8s/deployment.yaml`. This has been tested on DigitalOcean. Tweaks may be
+necessary for clusters hosted by other providers.
+
+The SSB config file is injected into the container as a volume mount. You should
+update the `ssb-config` configMap in the deployment file with your external IP
+or domain, and any other changes you require. Unfortunately, because this is
+being done on a subPath, changes to the configMap will not propogate
+automatically. Please keep this in mind if you find you need to make config
+changes, or, pull requests welcome.
+
+After updating the config, you can install SSB into your cluster with the
+following:
+
+```shell
+kubectl apply -f hack/k8s/deployment.yaml
+```
+
+This will do a number of things:
+
+1. create a namespace on your cluster called `scuttlebutt`
+1. create a service exposing port 8008
+1. create a 5gb persistent volume which is mapped to `/home/node/.ssb`
+1. create and inject your ssb config
+
+Much remains the same as with the manual install. However, since we're using
+Kubernetes in this case for orchestration, there is no need to run additional
+services like healer, etc. as liveness checks are handled by the deployment
+configuration.
+
+I've opted short-term _not_ to expose ssh access to the running container, but
+you may access it by first getting the name of your running pod, then:
+
+```shell
+kubectl exec -it <your pod name> -n scuttlebutt /bin/bash
+```
+
+From here you can invoke any of the commands detailed below.
 
 ## command and control
 
