@@ -337,6 +337,12 @@ being done on a subPath, changes to the configMap will not propogate
 automatically. Please keep this in mind if you find you need to make config
 changes, or, pull requests welcome.
 
+SSB requires persistence to store the log, secrets. The chosen default in the
+included config is 5gb, but you should raise this to a level that makes sense
+for your traffic. If you should find your volume filling up, follow the
+instructions for your provider as to how to increase the size or migrate to a
+larger volume.
+
 After updating the config, you can install SSB into your cluster with the
 following:
 
