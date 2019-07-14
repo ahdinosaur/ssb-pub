@@ -1,0 +1,110 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: scuttlebutt
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: ssb-pub
+  namespace: scuttlebutt
+spec:
+  type: LoadBalancer
+  selector:
+    app: ssb-pub
+  ports:
+    - protocol: TCP
+      port: 8008
+      targetPort: 8008
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: ssb-pvc
+  namespace: scuttlebutt
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: do-block-storage
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: ssb-config
+  namespace: scuttlebutt
+data:
+  config: | 
+    {
+      "connections": {
+        "incoming": {
+          "net": [
+            {
+              "scope": "public",
+              "host": "0.0.0.0",
+              "external": "your.pub.domain or IP",
+              "transform": "shs",
+              "port": 8008
+            }
+          ]
+        },
+        "outgoing": {
+          "net": [
+            {
+              "transform": "shs"
+            }
+          ]
+        }
+      }
+    }
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: ssb-pub-deployment
+  namespace: scuttlebutt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ssb-pub
+  template:
+    metadata:
+      labels:
+        app: ssb-pub
+    spec:
+      containers:
+        - name: ssb-pub
+          image: ahdinosaur/ssb-pub
+          imagePullPolicy: Always
+          livenessProbe:
+            exec:
+              command:
+                - sbot
+                - whoami
+            initialDelaySeconds: 30
+            periodSeconds: 300
+          ports:
+            - containerPort: 8008
+          volumeMounts:
+            - name: ssb-pub-volume
+              mountPath: "/home/node/.ssb"
+            - name: ssb-pub-config
+              mountPath: "/home/node/.ssb/config"
+              subPath: "config"
+      initContainers:
+        - name: ssb-datastore-permissions-fix
+          image: busybox
+          command: ["/bin/chmod", "-R", "777", "/data"]
+          volumeMounts:
+            - name: ssb-pub-volume
+              mountPath: "/data"
+      volumes:
+        - name: ssb-pub-volume
+          persistentVolumeClaim:
+            claimName: ssb-pvc
+        - name: ssb-pub-config
+          configMap:
+            name: ssb-config
