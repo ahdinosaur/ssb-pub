@@ -65,8 +65,8 @@ ssh root@your.ip.address.here
 
 10) invite and host your friends on [Scuttlebutt](https://www.scuttlebutt.nz) :house_with_garden:
 
-> 11) give your pub a name and description
-> 
+11) give your pub a name and description (optional)
+
 > ```
 > ./sbot publish --type about --about "@your.pubs.id.here" --name "Pubby McPubFace" --description "everyone should have a pub, this is mine"
 > ```
