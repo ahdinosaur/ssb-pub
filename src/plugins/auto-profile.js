@@ -1,8 +1,7 @@
 const pull = require('pull-stream')
 const explain = require('explain-error')
 
-
-const errorPubMissing =
+const errorProfileMissing =
   'Failed to self-assign profile because ' +
   'the current config is missing a `config.profile` value.';
 
@@ -19,7 +18,8 @@ function autoProfileInit(server, config) {
   var currentDescription = null
 
   if (!config.profile || typeof config.profile !== 'object') {
-    return server.emit('log:error', new Error(errorProfileMissing))
+    server.emit('log:warning', new Error(errorProfileMissing))
+    return
   }
 
   const { name: nextName, description: nextDescription } = config.profile

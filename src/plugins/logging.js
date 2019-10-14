@@ -6,7 +6,9 @@ const loggingPlugin = {
   manifest: {},
   permissions: {},
   init: function LoggingInit (server, config) {
-    var logger = Logger()
+    var logger = Logger({
+      pretty: true
+    })
     var serverLogger = logger.child({
       id: server.id
     })

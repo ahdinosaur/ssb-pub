@@ -20,7 +20,8 @@ function PubServer (config) {
     path,
     host = nonPrivate.v4,
     port = 8008,
-    profile = {},
+    profile,
+    admin,
     services = [],
     caps = ssbCaps
   } = config
@@ -28,16 +29,13 @@ function PubServer (config) {
   assert(typeof path === 'string', 'Expected config.path string, got: ' + path)
   assert(typeof host === 'string', 'Expected config.host string, got: ' + host)
   assert(typeof port === 'number', 'Expected config.host number, got: ' + port)
-  assert(profile && typeof profile === 'object', 'Expected config.profile object, got: ' + profile)
   assert(Array.isArray(services), 'Expected config.services array, got: ' + services)
   assert(caps && typeof caps === 'object', 'Expected config.caps object, got: ' + caps)
 
-  const {
-    name,
-    description,
-  } = profile
-
-  assert(typeof name === 'string', 'Expected config.profile.name string, got: ' + name)
+  if (profile) {
+    assert(typeof profile === 'object', 'Expected config.profile object, got: ' + profile)
+    assert(typeof profile.name === 'string', 'Expected config.profile.name string, got: ' + profile.name)
+  }
 
   // get active services
   const pubServices = (['base', ...services]).map(service => {
@@ -60,8 +58,9 @@ function PubServer (config) {
     path,
     host,
     port,
+    caps,
     profile,
-    caps
+    admin
   })
 
   // run ssb config through plugins
@@ -85,7 +84,7 @@ function PubServer (config) {
 }
 
 function generateSsbConfig (config) {
-  const { path, host, port, caps, profile } = config
+  const { path, host, port, caps, profile, admin } = config
 
   const keysPath = join(path, 'secret')
   const keys = ssbKeys.loadOrCreateSync(keysPath)
@@ -95,6 +94,7 @@ function generateSsbConfig (config) {
     host,
     port,
     profile,
+    admin,
     keys,
     connections: {
       incoming: {

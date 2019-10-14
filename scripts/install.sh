@@ -7,13 +7,17 @@ set -o pipefail
 PUB_HOME="${HOME}/ssb-pub"
 PUB_SERVICE="ssb-pub.service"
 PUB_CONFIG="${HOME}/ssb-pub/config.json"
-PUB_DATA="${HOME}/ssb-pub/data"
 
 #
 # create pub directories
 #
 mkdir -p "${PUB_HOME}"
 cd "${PUB_HOME}"
+
+#
+# redirect internal 8007 to external 80
+#
+sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8007
 
 #
 # install node via nvm
