@@ -11,8 +11,8 @@ easily host your own [Secure ScuttleButt (SSB)](https://www.scuttlebutt.nz) pub
   - base service
     - logging plugin
     - auto-profile plugin
-- [ ] http server
-  - [ ] initial admin config
+- [x] http server
+  - [x] initial admin config
     - name
     - description
     - host
@@ -20,10 +20,12 @@ easily host your own [Secure ScuttleButt (SSB)](https://www.scuttlebutt.nz) pub
   - [ ] public landing page
   - [ ] admin-only config page
     - passwords or passwordless tokens?
+  - [ ] styles
 - [ ] installer
-  - [ ] systemd service
-  - [ ] systemd watchdog (using `./src/plugins/watchdog`)
-  - [ ] systemd memory and cpu limits
+  - [x] systemd service
+  - [x] systemd watchdog (using `./src/plugins/watchdog`)
+  - [x] systemd memory and cpu limits
+  - [ ] test deploy
 - [ ] documentation
   - [ ] how to setup
 - [ ] services
@@ -45,7 +47,15 @@ see your new demo identity
 node example/client whoami
 ```
 
-see that the pub automatically published an about message
+browse to http://localhost:8007 to see admin setup page
+
+put `localhost` as host, anything else is ka pai
+
+then after you submit the form, the server will die (to be auto-restarted), for now manually restart
+
+notice `example/data/config.json` has been saved
+
+and see that the pub automatically published an about message with the given name
 
 ```shell
 node example/client.js createHistoryStream --id "$(node example/client.js whoami | jq -r .id)"
