@@ -15,7 +15,7 @@
     "express-pino-logger": "^5.0.0",
     "muxrpcli": "^3.1.2",
     "pino": "^6.3.2",
-    "sd-notify": "^2.7.2",
+    "sd-notify": "^2.8.0",
     "secret-stack": "^6.3.0",
     "ssb-blobs": "^1.2.2",
     "ssb-config": "^3.3.2",
