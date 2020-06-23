@@ -11,16 +11,22 @@ easily host your own [Secure ScuttleButt (SSB)](https://www.scuttlebutt.nz) pub
   - base service
     - logging plugin
     - auto-profile plugin
+    - systemd plugin
 - [x] http server
   - [x] initial admin config
     - name
     - description
     - host
     - services
+  - [ ] reverse proxy to other service ports
+  - [ ] lets encrypt
   - [ ] public landing page
   - [ ] admin-only config page
     - passwords or passwordless tokens?
   - [ ] styles
+- [ ] npm package
+    - [ ] bin script
+    - [ ] main module
 - [ ] installer
   - [x] systemd service
   - [x] systemd watchdog (using `./src/plugins/watchdog`)
@@ -70,6 +76,23 @@ node example/client.js createHistoryStream --id "$(node example/client.js whoami
 - name: string
 - config: `config => nextConfig`
 - stack: `secret-stack` plugin
+
+### config
+
+```js
+{
+  path: "~pub/data"
+  host: "wiggle.land",
+  port: 8108,
+  profile: {
+    name: "Wiggle land",
+    description: "A land for wiggles and so much more."
+  },
+  admin: {
+    email: "admin@wiggle.land"
+  },
+}
+```
 
 ### deps
 
