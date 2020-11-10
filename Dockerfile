@@ -11,7 +11,7 @@ ENV PATH=/home/node/.npm-global/bin:$PATH
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 
 USER node
-RUN npm install -g ssb-server@15.2.0
+RUN npm install -g ssb-server@15.3.0
 
 EXPOSE 8008
 
