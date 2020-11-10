@@ -3,7 +3,7 @@ FROM node:14
 MAINTAINER Michael Williams <michael.williams@enspiral.com>
 
 USER root
-ADD https://github.com/krallin/tini/releases/download/v0.18.0/tini /tini
+ADD https://github.com/krallin/tini/releases/download/v0.19.0/tini /tini
 RUN chmod +x /tini
 RUN mkdir /home/node/.npm-global ; \
     chown -R node:node /home/node/
