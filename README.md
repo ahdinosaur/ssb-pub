@@ -4,7 +4,7 @@ easily host your own [Secure ScuttleButt (SSB)](https://www.scuttlebutt.nz) pub 
 
 if you feel like sharing your pub, please add it to [the informal registry of pubs](https://github.com/ssbc/scuttlebot/wiki/Pub-Servers) as a private pub with your contact details so newbies may request an invite from you!
 
-(if you are running a v1 pub, [migrate to the latest v2!](#migrating-from-v1-to-v2) :tada: )
+(if you are running a pub version less than 2.2.0, please [upgrade](#upgrading)! :tada: )
 
 :heart:
 
@@ -85,7 +85,7 @@ ssh root@your.ip.address.here
 >         {
 >           "scope": "public",
 >           "host": "0.0.0.0",
->           "external": ["hostname.yourdomain.tld"],
+>           "external": "hostname.yourdomain.tld",
 >           "transform": "shs",
 >           "port": 8008
 >         }
@@ -177,7 +177,7 @@ cat > ~/ssb-pub-data/config <<EOF
         {
           "scope": "public",
           "host": "0.0.0.0",
-          "external": ["${EXTERNAL}"],
+          "external": "${EXTERNAL}",
           "transform": "shs",
           "port": 8008
         }
@@ -411,6 +411,36 @@ docker stop sbot
 docker rm sbot
 # edit ~/ssb-pub-data/config if necessary
 ./create-sbot
+```
+
+### migrating from `<2.2.0` to `2.2.0+`
+
+edit your `~/ssb-pub-data/config`, such that **`connections.incoming.net[].external`** changes from an array of strings to a single string.
+
+```diff
+{
+  "connections": {
+    "incoming": {
+      "net": [
+        {
+          "scope": "public",
+          "host": "0.0.0.0",
+-          "external": ["hostname.yourdomain.tld"],
++          "external": "hostname.yourdomain.tld",
+          "transform": "shs",
+          "port": 8008
+        }
+      ]
+    },
+    "outgoing": {
+      "net": [
+        {
+          "transform": "shs"
+        }
+      ]
+    }
+  }
+}
 ```
 
 ### migrating from `v1` to `v2`
