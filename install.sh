@@ -38,7 +38,7 @@ cat > ~/ssb-pub-data/config <<EOF
         {
           "scope": "public",
           "host": "0.0.0.0",
-          "external": ["${EXTERNAL}"],
+          "external": "${EXTERNAL}",
           "transform": "shs",
           "port": 8008
         }
