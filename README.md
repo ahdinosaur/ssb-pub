@@ -1,5 +1,7 @@
 # ssb-pub
 
+**UNMAINTAINED**, for a maintained alternative to `ssb-pub`, see [`go-ssb-room`](https://github.com/ssb-ngi-pointer/go-ssb-room).
+
 easily host your own [Secure ScuttleButt (SSB)](https://www.scuttlebutt.nz) pub in a docker container
 
 if you feel like sharing your pub, please add it to [the informal registry of pubs](https://github.com/ssbc/scuttlebot/wiki/Pub-Servers) as a private pub with your contact details so newbies may request an invite from you!
@@ -10,7 +12,7 @@ if you feel like sharing your pub, please add it to [the informal registry of pu
 
 ## table of contents
 
-- [one-click setup](#one-click-setup)
+- [~~one-click setup~~](#one-click-setup)
 - [manual setup](#manual-setup)
   - [install docker](#install-docker)
   - [install `ssb-pub` image](#install-ssb-pub-image)
@@ -26,7 +28,9 @@ if you feel like sharing your pub, please add it to [the informal registry of pu
   - [update `ssb-pub` image](#update-ssb-pub-image)
   - [migrating from v1 to v2](#migrating-from-v1-to-v2)
 
-## one-click setup
+## ~~one-click setup~~
+
+(currently broken, soz)
 
 1) go to [![Install on DigitalOcean](http://butt.nz/button.svg)](http://butt.nz) at [butt.nz](http://butt.nz)
 2) choose your server size and region
