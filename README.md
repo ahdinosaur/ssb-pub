@@ -32,7 +32,7 @@ if you feel like sharing your pub, please add it to [the informal registry of pu
 
 (currently broken, soz)
 
-1) go to [![Install on DigitalOcean](http://butt.nz/button.svg)](http://butt.nz) at [butt.nz](http://butt.nz)
+1) go to [![Install on DigitalOcean](http://legacy-installer.butt.nz//button.svg)](http://butt.nz) at [http://legacy-installer.butt.nz/](http://legacy-installer.butt.nz/)
 2) choose your server size and region
 
 > ![digital-butt-step-1.png](./images/digital-butt-step-1.png)
