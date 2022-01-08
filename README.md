@@ -83,14 +83,19 @@ node example/client.js createHistoryStream --id "$(node example/client.js whoami
 {
   path: "~pub/data"
   host: "wiggle.land",
-  port: 8108,
   profile: {
     name: "Wiggle land",
-    description: "A land for wiggles and so much more."
+    description: "A land for wiggles and so much more.",
+    adminEmail: "admin@wiggle.land"
   },
-  admin: {
-    email: "admin@wiggle.land"
-  },
+  services: {
+    ssb: {
+      port: 8108
+    },
+    pub: {
+      port: 8109
+    }
+  }
 }
 ```
 

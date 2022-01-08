@@ -18,27 +18,13 @@ function PubServer (config) {
 
   const {
     path,
-    host = nonPrivate.v4,
-    port = 8008,
-    profile,
-    admin,
-    services = [],
-    caps = ssbCaps
+    services: serviceDescriptors = [],
   } = config
 
-  assert(typeof path === 'string', 'Expected config.path string, got: ' + path)
-  assert(typeof host === 'string', 'Expected config.host string, got: ' + host)
-  assert(typeof port === 'number', 'Expected config.host number, got: ' + port)
-  assert(Array.isArray(services), 'Expected config.services array, got: ' + services)
-  assert(caps && typeof caps === 'object', 'Expected config.caps object, got: ' + caps)
-
-  if (profile) {
-    assert(typeof profile === 'object', 'Expected config.profile object, got: ' + profile)
-    assert(typeof profile.name === 'string', 'Expected config.profile.name string, got: ' + profile.name)
-  }
+  assert(Array.isArray(serviceDescriptors), 'Expected config.services array, got: ' + services)
 
   // get active services
-  const pubServices = (['base', ...services]).map(service => {
+  const services = servicesDescriptors.map(service => {
     if (typeof service === 'string') {
       service = { name: service }
     }
@@ -53,24 +39,16 @@ function PubServer (config) {
     return Object.assign(service, handler)
   })
 
-  // generate ssb config
-  const initialSsbConfig = generateSsbConfig({
-    path,
-    host,
-    port,
-    caps,
-    profile,
-    admin
-  })
+  const initialConfig = { path }
 
   // run ssb config through plugins
-  const ssbConfig = pubServices.reduce((configSofar, nextService) => {
+  const ssbConfig = services.reduce((configSofar, nextService) => {
     return nextService.config(configSofar, nextService.options)
-  }, initialSsbConfig)
+  }, initialConfig)
 
   // create ssb stack
   const initialSsbStack = SecretStack({ caps })
-  const ssbStack = pubServices.reduce((stackSoFar, nextService) => {
+  const ssbStack = services.reduce((stackSoFar, nextService) => {
     nextService.stack(stackSoFar, nextService.options)
     return stackSoFar
   }, initialSsbStack)
@@ -83,47 +61,3 @@ function PubServer (config) {
   writeFileSync(manifestPath, JSON.stringify(server.getManifest(), null, 2))
 }
 
-function generateSsbConfig (config) {
-  const { path, host, port, caps, profile, admin } = config
-
-  const keysPath = join(path, 'secret')
-  const keys = ssbKeys.loadOrCreateSync(keysPath)
-
-  var ssbConfig = {
-    path,
-    host,
-    port,
-    profile,
-    admin,
-    keys,
-    connections: {
-      incoming: {
-        net: [
-          {
-            scope: 'public',
-            host,
-            port,
-            external: [host],
-            scope: ['public'],
-            transform: 'shs'
-          }
-        ]
-      },
-      outgoing: {
-        net: [
-          {
-            transform: 'shs'
-          }
-        ]
-      }
-    },
-    caps
-  }
-
-  setDefaultSsbConfig(ssbConfig)
-
-  // TODO change ssb-config to allow setting config.path
-  ssbConfig.path = path
-
-  return ssbConfig
-}
