@@ -102,14 +102,26 @@ sudo systemctl restart ssb-server
 
 ### migrating to v4
 
-**UNTESTED**
-
 first backup your old `ssb-pub-data`, just in case!
 
-after installing the v4 `ssb-pub` package:
+stop all old `ssb-pub` dockers:
 
 ```shell
-sudo systemctl stop ssb-pub
+docker stop sbot
+docker stop healer
+```
+
+remove fallback cron restarts (if they exist):
+
+```shell
+sudo rm /etc/cron.hourly/sbot
+sudo rm /etc/cron.hourly/healer
+```
+
+now, after installing the v4 `ssb-pub` package:
+
+```shell
+sudo systemctl stop ssb-server
 sudo rm -rf /var/lib/ssb/*
 
 sudo mv ssb-pub-data/secret /var/lib/ssb/
@@ -119,8 +131,12 @@ sudo ssb-offset-converter -if lfo ssb-pub-data/flume/log.offset /var/lib/ssb/log
 sudo mv ssb-pub-data/blobs /var/lib/ssb/
 
 sudo chown -R ssb:ssb /var/lib/ssb
-sudo systemctl start ssb-pub
+sudo systemctl start ssb-server
+```
 
+either the server will eventually receive connections from peers who try to connect, or we can force a new connection:
+
+```shell
 sudo -u ssb ssb-cli connect "net:ssb.learningsocieties.org:8008~shs:uMiN0TRVMGVNTQUb6KCbiOi/8UQYcyojiA83rCghxGo="
 ```
 
