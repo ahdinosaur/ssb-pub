@@ -26,18 +26,20 @@ easily host your own [Secure ScuttleButt (SSB)](https://www.scuttlebutt.nz) pub!
 
 ### boot Debian server
 
-in the cloud, or in your home, spin up a [Debian](https://www.debian.org/) (or Ubuntu) server.
+in the cloud, or in your home, spin up a [Debian](https://www.debian.org/) server.
 
 ### download .deb package
 
+download a .deb package from the [latest v4+ releases](https://github.com/ahdinosaur/ssb-pub/releases).
+
 ```shell
-wget TODO
+wget ${URL}
 ```
 
 ### install .deb package
 
 ```shell
-sudo dpkg -i ssb-pub_*_amd64.deb
+sudo dpkg -i ssb-pub_*_*.deb
 ```
 
 ### configure ssb server
