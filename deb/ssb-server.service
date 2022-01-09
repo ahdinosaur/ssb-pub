@@ -1,0 +1,11 @@
+[Unit]
+Description=ssb server
+
+[Service]
+Type=simple
+User=ssb
+ExecStart=/usr/bin/ssb-server
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

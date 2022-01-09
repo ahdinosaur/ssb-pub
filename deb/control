@@ -1,0 +1,5 @@
+Package: ssb-pub
+Version: ${PKG_VERSION}
+Architecture: ${PKG_ARCH}
+Maintainer: Michael Williams <michael.williams@enspiral.com>
+Description: debian package for ssb pub server (using go-sbot)

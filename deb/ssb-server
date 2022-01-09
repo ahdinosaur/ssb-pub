@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+set -o pipefail
+
+source /etc/default/ssb
+
+/usr/bin/ssb-server-go -enable-ebt -hops 2 -lis ":${SSB_PORT}" -repo /var/lib/ssb ":${SSB_WS_POST}" $@

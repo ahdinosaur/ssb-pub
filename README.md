@@ -1,104 +1,78 @@
 # ssb-pub
 
-easily host your own [Secure ScuttleButt (SSB)](https://www.scuttlebutt.nz) pub
+easily host your own [Secure ScuttleButt (SSB)](https://www.scuttlebutt.nz) pub!
+
+(uses [`cryptoscope/ssb`](https://github.com/cryptoscope/ssb) `go-sbot`)
 
 :heart:
 
-## TODO
+## table of contents
 
-- [x] pub server and client
-  - service interface
-  - base service
-    - logging plugin
-    - auto-profile plugin
-    - systemd plugin
-- [x] http server
-  - [x] initial admin config
-    - name
-    - description
-    - host
-    - services
-  - [ ] reverse proxy to other service ports
-  - [ ] lets encrypt
-  - [ ] public landing page
-  - [ ] admin-only config page
-    - passwords or passwordless tokens?
-  - [ ] styles
-- [ ] npm package
-    - [ ] bin script
-    - [ ] main module
-- [ ] installer
-  - [x] systemd service
-  - [x] systemd watchdog (using `./src/plugins/watchdog`)
-  - [x] systemd memory and cpu limits
-  - [ ] test deploy
-- [ ] documentation
-  - [ ] how to setup
-- [ ] services
-  - [ ] ssb-room
-  - [ ] ssb-viewer
-  - [ ] git-ssb
+- [setup](#setup)
+  - [boot Debian server](#boot-debian-server)
+  - [download .deb package](#download-deb-package)
+  - [install .deb package](#install-deb-package)
+  - [configure ssb server](#configure-ssb-server)
+- [command and control](#command-and-control)
+  - [publish to feed](#publish-to-feed)
+  - [create invites](#create-invites)
+  - [stop, start, restart service](#stop-start-restart-service)
+- [upgrading](#upgrading)
+  - [migrating to v4](#migrating-to-v4)
+- [dev](#dev)
 
-## demo
+## setup
 
-run demo pub server
+### boot Debian server
 
-```shell
-node example/server
-```
+### download .deb package
 
-see your new demo identity
+### install .deb package
+
+### configure ssb server
+
+## command and control
+
+### publish to feed
+
+### create invites
+
+### start, stop, restart service
+
+## upgrading
+
+### migrating to v4
+
+## dev
+
+install [Vagrant](https://www.vagrantup.com/)
+
+boot up the Vagrant dev box
 
 ```shell
-node example/client whoami
+vagrant up
 ```
 
-browse to http://localhost:8007 to see admin setup page
-
-put `localhost` as host, anything else is ka pai
-
-then after you submit the form, the server will die (to be auto-restarted), for now manually restart
-
-notice `example/data/config.json` has been saved
-
-and see that the pub automatically published an about message with the given name
+ssh into the dev box
 
 ```shell
-node example/client.js createHistoryStream --id "$(node example/client.js whoami | jq -r .id)"
+vagrant ssh
 ```
 
-## notes
+go into the local dir, from the dev box
 
-### concepts
-
-#### service
-
-- name: string
-- config: `config => nextConfig`
-- stack: `secret-stack` plugin
-
-### config
-
-```js
-{
-  path: "~pub/data"
-  host: "wiggle.land",
-  profile: {
-    name: "Wiggle land",
-    description: "A land for wiggles and so much more.",
-    adminEmail: "admin@wiggle.land"
-  },
-  services: {
-    ssb: {
-      port: 8108
-    },
-    pub: {
-      port: 8109
-    }
-  }
-}
+```shell
+cd /vagrant
 ```
 
-### deps
+### build .deb packages
 
-- `sudo apt install libsystemd-dev`
+```shell
+./deb/build.sh
+```
+
+### install package
+
+```shell
+sudo dpkg -i builds/ssb-pub_*_amd64.deb
+```
