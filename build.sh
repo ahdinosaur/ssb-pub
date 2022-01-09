@@ -5,7 +5,7 @@ set -o pipefail
 
 DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-PKG_VERSION="0.0.1"
+PKG_VERSION="4.0.0-pre.1"
 
 DEB_SRC_DIR="${DIR}/deb"
 DEB_BUILD_DIR="/tmp/ssb-pub"
@@ -35,6 +35,8 @@ do
   env GOOS=linux GOARCH=${PKG_ARCH} go build ./cmd/sbotcli
   echo "compiling go-sbot"
   env GOOS=linux GOARCH=${PKG_ARCH} go build ./cmd/go-sbot
+  echo "compiling ssb-offset-converter"
+  env GOOS=linux GOARCH=${PKG_ARCH} go build ./cmd/ssb-offset-converter
   cd "${DIR}"
 
   ###
@@ -78,6 +80,9 @@ do
   cp "${GO_SSB_DIR}/sbotcli" "${DEB_BUILD_DIR}/usr/bin/ssb-cli-go"
   chmod 755 "${DEB_BUILD_DIR}/usr/bin/ssb-cli-go"
   sudo chown root:root "${DEB_BUILD_DIR}/usr/bin/ssb-cli-go"
+  cp "${GO_SSB_DIR}/ssb-offset-converter" "${DEB_BUILD_DIR}/usr/bin/ssb-offset-converter"
+  chmod 755 "${DEB_BUILD_DIR}/usr/bin/ssb-offset-converter"
+  sudo chown root:root "${DEB_BUILD_DIR}/usr/bin/ssb-offset-converter"
 
   # copy wrapper scripts
   cp "${DEB_SRC_DIR}/ssb-server" "${DEB_BUILD_DIR}/usr/bin/ssb-server"

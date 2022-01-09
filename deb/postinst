@@ -1,15 +1,13 @@
 #!/bin/sh
 set -e
 
-# create user which go-sbot runs as
+# create user for ssb to run as
 adduser --quiet --system --group --no-create-home ssb
 
-# set permissions
-chown ssb:ssb /usr/bin/ssb-server
-chown ssb:ssb /usr/bin/ssb-cli
-chmod u+s /usr/bin/ssb-cli
-
+# create ssb data dir
 mkdir -p /var/lib/ssb
+
+# set permissions
 chown ssb:ssb /var/lib/ssb
 
 # Automatically added by cargo-deb
