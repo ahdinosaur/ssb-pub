@@ -11,6 +11,12 @@ DEB_SRC_DIR="${DIR}/deb"
 DEB_BUILD_DIR="/tmp/ssb-pub"
 GO_SSB_DIR="${DIR}/go-ssb"
 
+# create builds dir if not exists
+if [ ! -d "${DIR}/builds" ]
+then
+  mkdir "${DIR}/builds"
+fi
+
 for PKG_ARCH in "amd64" "arm64"
 do
   echo "building ssb-pub version: ${PKG_VERSION}, arch ${PKG_ARCH}"
