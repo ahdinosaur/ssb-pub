@@ -5,7 +5,7 @@ set -o pipefail
 
 DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-PKG_VERSION="4.0.0-pre.1"
+PKG_VERSION="4.0.0-pre.2"
 
 DEB_SRC_DIR="${DIR}/deb"
 DEB_BUILD_DIR="/tmp/ssb-pub"
