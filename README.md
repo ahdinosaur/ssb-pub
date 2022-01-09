@@ -102,6 +102,28 @@ sudo systemctl restart ssb-server
 
 ### migrating to v4
 
+**UNTESTED**
+
+first backup your old `ssb-pub-data`, just in case!
+
+after installing the v4 `ssb-pub` package:
+
+```shell
+sudo systemctl stop ssb-pub
+sudo rm -rf /var/lib/ssb/*
+
+sudo mv ssb-pub-data/secret /var/lib/ssb/
+
+sudo ssb-offset-converter -if lfo ssb-pub-data/flume/log.offset /var/lib/ssb/log
+
+sudo mv ssb-pub-data/blobs /var/lib/ssb/
+
+sudo chown -R ssb:ssb /var/lib/ssb
+sudo systemctl start ssb-pub
+
+sudo -u ssb ssb-cli connect "net:ssb.learningsocieties.org:8008~shs:uMiN0TRVMGVNTQUb6KCbiOi/8UQYcyojiA83rCghxGo="
+```
+
 ## dev
 
 install [Vagrant](https://www.vagrantup.com/)
