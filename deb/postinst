@@ -2,28 +2,28 @@
 set -e
 
 # create user for ssb to run as
-adduser --quiet --system --group --no-create-home ssb
+adduser --quiet --system --group --no-create-home ssb-pub
 
 # create ssb data dir
-mkdir -p /var/lib/ssb
+mkdir -p /var/lib/ssb-pub
 
 # set permissions
-chown ssb:ssb /var/lib/ssb
+chown ssb-pub:ssb-pub /var/lib/ssb-pub
 
 # Automatically added by cargo-deb
 if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
 	# This will only remove masks created by d-s-h on package removal.
-	deb-systemd-helper unmask ssb-server.service >/dev/null || true
+	deb-systemd-helper unmask ssb-pub.service >/dev/null || true
 
 	# was-enabled defaults to true, so new installations run enable.
-	if deb-systemd-helper --quiet was-enabled ssb-server.service; then
+	if deb-systemd-helper --quiet was-enabled ssb-pub.service; then
 		# Enables the unit on first installation, creates new
 		# symlinks on upgrades if the unit file has changed.
-		deb-systemd-helper enable ssb-server.service >/dev/null || true
+		deb-systemd-helper enable ssb-pub.service >/dev/null || true
 	else
 		# Update the statefile to add new symlinks (if any), which need to be
 		# cleaned up on purge. Also remove old symlinks.
-		deb-systemd-helper update-state ssb-server.service >/dev/null || true
+		deb-systemd-helper update-state ssb-pub.service >/dev/null || true
 	fi
 fi
 # End automatically added section
@@ -36,7 +36,7 @@ if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-decon
 		else
 			_dh_action=start
 		fi
-		deb-systemd-invoke $_dh_action ssb-server.service >/dev/null || true
+		deb-systemd-invoke $_dh_action ssb-pub.service >/dev/null || true
 	fi
 fi
 # End automatically added section

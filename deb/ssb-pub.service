@@ -1,10 +1,10 @@
 [Unit]
-Description=ssb server
+Description=ssb pub server
 
 [Service]
 Type=simple
-User=ssb
-ExecStart=/usr/bin/ssb-server
+User=ssb-pub
+ExecStart=/usr/bin/ssb-pub
 Restart=always
 
 [Install]

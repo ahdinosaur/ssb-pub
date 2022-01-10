@@ -6,6 +6,6 @@
 set -e
 set -o pipefail
 
-source /etc/default/ssb
+source /etc/default/ssb-pub
 
-/usr/bin/ssb-cli-go --unixsock "/var/lib/ssb/socket" $@
+/usr/bin/ssb-cli-go --unixsock "/var/lib/ssb-pub/socket" $@

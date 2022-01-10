@@ -2,6 +2,6 @@
 set -e
 # Automatically added by cargo-deb
 if [ -d /run/systemd/system ] && [ "$1" = remove ]; then
-	deb-systemd-invoke stop ssb-server.service >/dev/null || true
+	deb-systemd-invoke stop ssb-pub.service >/dev/null || true
 fi
 # End automatically added section

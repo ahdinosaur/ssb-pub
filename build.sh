@@ -43,23 +43,23 @@ do
   echo "compiling sbotcli"
   env GOOS=linux GOARCH=${PKG_ARCH} go build -o "${DEB_BUILD_DIR}/usr/bin/ssb-cli-go" ./cmd/sbotcli
   echo "compiling go-sbot"
-  env GOOS=linux GOARCH=${PKG_ARCH} go build -o "${DEB_BUILD_DIR}/usr/bin/ssb-server-go" ./cmd/go-sbot
+  env GOOS=linux GOARCH=${PKG_ARCH} go build -o "${DEB_BUILD_DIR}/usr/bin/ssb-pub-go" ./cmd/go-sbot
   echo "compiling ssb-offset-converter"
   env GOOS=linux GOARCH=${PKG_ARCH} go build -o "${DEB_BUILD_DIR}/usr/bin/ssb-offset-converter" ./cmd/ssb-offset-converter
   cd "${DIR}"
 
   # fix compiled binaries permissions
-  chmod 755 "${DEB_BUILD_DIR}/usr/bin/ssb-server-go"
-  sudo chown root:root "${DEB_BUILD_DIR}/usr/bin/ssb-server-go"
+  chmod 755 "${DEB_BUILD_DIR}/usr/bin/ssb-pub-go"
+  sudo chown root:root "${DEB_BUILD_DIR}/usr/bin/ssb-pub-go"
   chmod 755 "${DEB_BUILD_DIR}/usr/bin/ssb-cli-go"
   sudo chown root:root "${DEB_BUILD_DIR}/usr/bin/ssb-cli-go"
   chmod 755 "${DEB_BUILD_DIR}/usr/bin/ssb-offset-converter"
   sudo chown root:root "${DEB_BUILD_DIR}/usr/bin/ssb-offset-converter"
 
   # copy wrapper scripts
-  cp "${DEB_SRC_DIR}/ssb-server" "${DEB_BUILD_DIR}/usr/bin/ssb-server"
-  chmod 755 "${DEB_BUILD_DIR}/usr/bin/ssb-server"
-  sudo chown root:root "${DEB_BUILD_DIR}/usr/bin/ssb-server"
+  cp "${DEB_SRC_DIR}/ssb-pub" "${DEB_BUILD_DIR}/usr/bin/ssb-pub"
+  chmod 755 "${DEB_BUILD_DIR}/usr/bin/ssb-pub"
+  sudo chown root:root "${DEB_BUILD_DIR}/usr/bin/ssb-pub"
   cp "${DEB_SRC_DIR}/ssb-cli" "${DEB_BUILD_DIR}/usr/bin/ssb-cli"
   chmod 755 "${DEB_BUILD_DIR}/usr/bin/ssb-cli"
   sudo chown root:root "${DEB_BUILD_DIR}/usr/bin/ssb-cli"
@@ -82,13 +82,13 @@ do
 
   # copy systemd service file
   mkdir -p "${DEB_BUILD_DIR}/lib/systemd/system"
-  cp "${DEB_SRC_DIR}/ssb-server.service" "${DEB_BUILD_DIR}/lib/systemd/system"
+  cp "${DEB_SRC_DIR}/ssb-pub.service" "${DEB_BUILD_DIR}/lib/systemd/system"
   sudo chown root:root "${DEB_BUILD_DIR}/lib/systemd/system"
 
   # copy config file
   mkdir -p "${DEB_BUILD_DIR}/etc/default"
-  cp "${DEB_SRC_DIR}/etc-default" "${DEB_BUILD_DIR}/etc/default/ssb"
-  sudo chown root:root "${DEB_BUILD_DIR}/etc/default/ssb"
+  cp "${DEB_SRC_DIR}/etc-default" "${DEB_BUILD_DIR}/etc/default/ssb-pub"
+  sudo chown root:root "${DEB_BUILD_DIR}/etc/default/ssb-pub"
 
   # create deb package
   DEB_FILE_NAME="ssb-pub_${PKG_VERSION}_${PKG_ARCH}.deb"
