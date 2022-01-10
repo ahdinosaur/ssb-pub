@@ -17,7 +17,8 @@ easily host your own [Secure ScuttleButt (SSB)](https://www.scuttlebutt.nz) pub!
   - [whoami](#whoami)
   - [publish to feed](#publish-to-feed)
   - [create invites](#create-invites)
-  - [stop, start, restart service](#stop-start-restart-service)
+  - [systemctl service](#systemctl-service)
+  - [journalctl logs](#journalctl-logs)
 - [upgrading](#upgrading)
   - [migrating to v4](#migrating-to-v4)
 - [dev](#dev)
@@ -50,6 +51,8 @@ sudo nano /etc/default/ssb
 
 ```txt
 SSB_PORT=8008
+SSB_HOPS=2
+SSB_EBT_ENABLED=no
 SSB_WS_PORT=8989
 ```
 
@@ -89,13 +92,27 @@ sudo -u ssb ssb-cli invite create --uses 100
 
 take the output, and replace [::] with the IP address or domain name pointing to the server.
 
-### start, stop, restart service
+### systemdctl service
 
 ```shell
 sudo systemctl status ssb-server
 sudo systemctl stop ssb-server
 sudo systemctl start ssb-server
 sudo systemctl restart ssb-server
+```
+
+### journalctl logs
+
+see all logs in pager:
+
+```shell
+sudo journalctl -u ssb-server
+```
+
+watch live tail of logs:
+
+```shell
+sudo journalctl -u ssb-server -f
 ```
 
 ## upgrading
@@ -133,6 +150,14 @@ sudo mv ssb-pub-data/blobs /var/lib/ssb/
 sudo chown -R ssb:ssb /var/lib/ssb
 sudo systemctl start ssb-server
 ```
+
+watch live tail of logs:
+
+```shell
+sudo journalctl -u ssb-server -f
+```
+
+notice the indexes take time to be rebuilt. in particular, replication will deny connections until after the `update-replicate` event.
 
 either the server will eventually receive connections from peers who try to connect, or we can force a new connection:
 
