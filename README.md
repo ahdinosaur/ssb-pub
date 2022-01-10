@@ -19,6 +19,7 @@ easily host your own [Secure ScuttleButt (SSB)](https://www.scuttlebutt.nz) pub!
   - [create invites](#create-invites)
   - [systemctl service](#systemctl-service)
   - [journalctl logs](#journalctl-logs)
+  - [heal message sequence mismatch](#heal-message-sequence-mismatch)
 - [upgrading](#upgrading)
   - [migrating to v4](#migrating-to-v4)
 - [dev](#dev)
@@ -113,6 +114,12 @@ watch live tail of logs:
 
 ```shell
 sudo journalctl -u ssb-server -f
+```
+
+### heal message sequence mismatch
+
+```shell
+sudo -u ssb ssb-server-go -repo /var/lib/ssb -fsck sequences -repair
 ```
 
 ## upgrading
