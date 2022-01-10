@@ -60,6 +60,8 @@ SSB_WS_PORT=8989
 
 ## command and control
 
+see [`go-sbot` Quick Start guide](https://github.com/cryptoscope/ssb/blob/master/docs/quick-start.md) for more info
+
 ### whoami
 
 ```shell
@@ -97,9 +99,14 @@ take the output, and replace `[::]` with the IP address or domain name pointing 
 
 ### connect to another pub
 
+follow another SSB server and connect with it. (note you need to follow a pub before you can connect with it)
+
 ```shell
+sbotcli publish contact --following @uMiN0TRVMGVNTQUb6KCbiOi/8UQYcyojiA83rCghxGo=.ed25519
 sudo -u ssb-pub ssb-cli connect 'net:ssb.learningsocieties.org:8008~shs:uMiN0TRVMGVNTQUb6KCbiOi/8UQYcyojiA83rCghxGo='
 ```
+
+the above commands are to connect to ssb.learningsocieties.org, and the domain and public key can be changed as needed.
 
 ### systemdctl service
 
