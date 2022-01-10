@@ -17,9 +17,25 @@ then
   mkdir "${DIR}/builds"
 fi
 
-for PKG_ARCH in "amd64" "arm64"
+for BUILD_ARCH in "amd64" "arm64" "armhf_v6" "armhf_v7"
 do
-  echo "building ssb-pub version: ${PKG_VERSION}, arch ${PKG_ARCH}"
+  echo "building ssb-pub version: ${PKG_VERSION}, arch ${BUILD_ARCH}"
+
+  if [ "${BUILD_ARCH}" == "armhf_v6" ]
+  then
+    GOARCH="arm"
+    GOARM="6"
+    PKG_ARCH="armhf"
+  elif [ "${BUILD_ARCH}" == "armhf_v7" ]
+  then
+    GOARCH="arm"
+    GOARM="7"
+    PKG_ARCH="armhf"
+  else
+    GOARCH="${BUILD_ARCH}"
+    GOARM=""
+    PKG_ARCH="${BUILD_ARCH}"
+  fi
 
   # delete build dir if exists
   if [ -d "${DEB_BUILD_DIR}" ]
@@ -41,11 +57,11 @@ do
   mkdir -p "${DEB_BUILD_DIR}/usr/bin"
   cd "${GO_SSB_DIR}"
   echo "compiling sbotcli"
-  env GOOS=linux GOARCH=${PKG_ARCH} go build -o "${DEB_BUILD_DIR}/usr/bin/ssb-cli-go" ./cmd/sbotcli
+  env GOOS=linux GOARCH="${GOARCH}" GOARM="${GOARM}" go build -o "${DEB_BUILD_DIR}/usr/bin/ssb-cli-go" ./cmd/sbotcli
   echo "compiling go-sbot"
-  env GOOS=linux GOARCH=${PKG_ARCH} go build -o "${DEB_BUILD_DIR}/usr/bin/ssb-pub-go" ./cmd/go-sbot
+  env GOOS=linux GOARCH="${GOARCH}" GOARM="${GOARM}" go build -o "${DEB_BUILD_DIR}/usr/bin/ssb-pub-go" ./cmd/go-sbot
   echo "compiling ssb-offset-converter"
-  env GOOS=linux GOARCH=${PKG_ARCH} go build -o "${DEB_BUILD_DIR}/usr/bin/ssb-offset-converter" ./cmd/ssb-offset-converter
+  env GOOS=linux GOARCH="${GOARCH}" GOARM="${GOARM}" go build -o "${DEB_BUILD_DIR}/usr/bin/ssb-offset-converter" ./cmd/ssb-offset-converter
   cd "${DIR}"
 
   # fix compiled binaries permissions
@@ -91,7 +107,7 @@ do
   sudo chown root:root "${DEB_BUILD_DIR}/etc/default/ssb-pub"
 
   # create deb package
-  DEB_FILE_NAME="ssb-pub_${PKG_VERSION}_${PKG_ARCH}.deb"
+  DEB_FILE_NAME="ssb-pub_${PKG_VERSION}_${BUILD_ARCH}.deb"
   echo "creating ${DEB_FILE_NAME}"
   cd "${DEB_BUILD_DIR}"
   dpkg-deb -b . "${DEB_FILE_NAME}"
