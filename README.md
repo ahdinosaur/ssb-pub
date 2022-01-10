@@ -149,6 +149,7 @@ sudo systemctl stop ssb-server
 sudo rm -rf /var/lib/ssb/*
 
 sudo cp ssb-pub-data/secret /var/lib/ssb/
+sudo chmod 0400 /var/lib/ssb/secret
 
 sudo ssb-offset-converter -if lfo ssb-pub-data/flume/log.offset /var/lib/ssb/log
 
