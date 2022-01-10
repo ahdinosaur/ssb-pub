@@ -5,4 +5,11 @@ set -o pipefail
 
 source /etc/default/ssb
 
-/usr/bin/ssb-server-go -enable-ebt -hops "${SSB_HOPS}" -lis ":${SSB_PORT}" -repo /var/lib/ssb ":${SSB_WS_PORT}" $@
+SSB_OPTS="${SSB_OPTS:-}"
+
+if [ "${SSB_EBT_ENABLED}" == "yes" ]
+then
+  SSB_OPTS="${SSB_OPTS} -enable-ebt"
+fi
+
+/usr/bin/ssb-server-go ${SSB_OPTS} -hops "${SSB_HOPS:-2}" -lis ":${SSB_PORT:-8008}" -repo /var/lib/ssb ":${SSB_WS_PORT:-8989}" $@
