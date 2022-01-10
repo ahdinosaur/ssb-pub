@@ -17,6 +17,7 @@ easily host your own [Secure ScuttleButt (SSB)](https://www.scuttlebutt.nz) pub!
   - [whoami](#whoami)
   - [publish to feed](#publish-to-feed)
   - [create invites](#create-invites)
+  - [connect to another pub](#connect-to-another-pub)
   - [systemctl service](#systemctl-service)
   - [journalctl logs](#journalctl-logs)
   - [heal message sequence mismatch](#heal-message-sequence-mismatch)
@@ -91,7 +92,14 @@ the following command creates an invite with 100 uses (number can be changed):
 sudo -u ssb-pub ssb-cli invite create --uses 100
 ```
 
-take the output, and replace [::] with the IP address or domain name pointing to the server.
+take the output, and replace `[::]` with the IP address or domain name pointing to the server.
+
+
+### connect to another pub
+
+```shell
+sudo -u ssb-pub ssb-cli connect 'net:ssb.learningsocieties.org:8008~shs:uMiN0TRVMGVNTQUb6KCbiOi/8UQYcyojiA83rCghxGo='
+```
 
 ### systemdctl service
 
@@ -170,7 +178,7 @@ notice the indexes take time to be rebuilt. in particular, replication will deny
 either the server will eventually receive connections from peers who try to connect, or we can force a new connection:
 
 ```shell
-sudo -u ssb-pub ssb-cli connect "net:ssb.learningsocieties.org:8008~shs:uMiN0TRVMGVNTQUb6KCbiOi/8UQYcyojiA83rCghxGo="
+sudo -u ssb-pub ssb-cli connect 'net:ssb.learningsocieties.org:8008~shs:uMiN0TRVMGVNTQUb6KCbiOi/8UQYcyojiA83rCghxGo='
 ```
 
 better yet, create a new invite and redeem from your personal Scuttlebutt account.
