@@ -124,7 +124,7 @@ now, after installing the v4 `ssb-pub` package:
 sudo systemctl stop ssb-server
 sudo rm -rf /var/lib/ssb/*
 
-sudo mv ssb-pub-data/secret /var/lib/ssb/
+sudo cp ssb-pub-data/secret /var/lib/ssb/
 
 sudo ssb-offset-converter -if lfo ssb-pub-data/flume/log.offset /var/lib/ssb/log
 
