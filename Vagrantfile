@@ -9,8 +9,9 @@ Vagrant.configure("2") do |config|
   GO_VERSION = "1.17"
   config.vm.provision "shell" do |s|
     s.inline = <<~SHELL
-      sudo apt update -q
-      sudo apt install -qy build-essential
+      export DEBIAN_FRONTEND=noninteractive
+      sudo apt-get update -q
+      sudo apt-get install -qy build-essential
       wget -q https://golang.org/dl/go#{GO_VERSION}.linux-amd64.tar.gz -O go#{GO_VERSION}.linux-amd64.tar.gz
       sudo tar -zxf go#{GO_VERSION}.linux-amd64.tar.gz -C /usr/local/
       echo "export PATH=/usr/local/go/bin:${PATH}" | sudo tee /etc/profile.d/go.sh
