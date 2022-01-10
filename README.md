@@ -173,6 +173,8 @@ either the server will eventually receive connections from peers who try to conn
 sudo -u ssb ssb-cli connect "net:ssb.learningsocieties.org:8008~shs:uMiN0TRVMGVNTQUb6KCbiOi/8UQYcyojiA83rCghxGo="
 ```
 
+better yet, create a new invite and redeem from your personal Scuttlebutt account.
+
 ## dev
 
 install [Vagrant](https://www.vagrantup.com/)
